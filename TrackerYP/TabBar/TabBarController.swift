@@ -12,7 +12,7 @@ class TabBarController: UITabBarController {
         UITabBar.appearance().backgroundColor = .white
         
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "ypBlue") ?? .blue], for: .selected)
-        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "ypGrey") ?? .gray], for: .normal)
+        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "ypGrey") ?? .lightGray], for: .normal)
         
         let trackersVC = TrackersViewController()
         let statisticVC = StatisticViewController()
