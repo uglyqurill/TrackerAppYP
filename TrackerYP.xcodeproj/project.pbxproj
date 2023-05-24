@@ -13,7 +13,7 @@
 		ED146AA22A16B29F007EC880 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED146AA12A16B29F007EC880 /* Assets.xcassets */; };
 		ED146AA52A16B29F007EC880 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ED146AA32A16B29F007EC880 /* LaunchScreen.storyboard */; };
 		ED146AAD2A16B357007EC880 /* CreatingTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED146AAC2A16B357007EC880 /* CreatingTrackerViewController.swift */; };
-		ED146AAF2A16B369007EC880 /* ScheduleViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED146AAE2A16B369007EC880 /* ScheduleViewControllerDelegate.swift */; };
+		ED146AAF2A16B369007EC880 /* CreatingHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED146AAE2A16B369007EC880 /* CreatingHabitViewController.swift */; };
 		ED146AB12A16B37D007EC880 /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED146AB02A16B37D007EC880 /* ScheduleViewController.swift */; };
 		ED146AB32A16B394007EC880 /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED146AB22A16B394007EC880 /* ScheduleTableViewCell.swift */; };
 		ED146AB72A16B473007EC880 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED146AB62A16B473007EC880 /* TabBarController.swift */; };
@@ -40,7 +40,7 @@
 		ED146AA42A16B29F007EC880 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED146AA62A16B29F007EC880 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ED146AAC2A16B357007EC880 /* CreatingTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatingTrackerViewController.swift; sourceTree = "<group>"; };
-		ED146AAE2A16B369007EC880 /* ScheduleViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewControllerDelegate.swift; sourceTree = "<group>"; };
+		ED146AAE2A16B369007EC880 /* CreatingHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatingHabitViewController.swift; sourceTree = "<group>"; };
 		ED146AB02A16B37D007EC880 /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
 		ED146AB22A16B394007EC880 /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		ED146AB62A16B473007EC880 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
@@ -118,7 +118,7 @@
 			children = (
 				ED146A9C2A16B29E007EC880 /* TrackersViewController.swift */,
 				ED146AAC2A16B357007EC880 /* CreatingTrackerViewController.swift */,
-				ED146AAE2A16B369007EC880 /* ScheduleViewControllerDelegate.swift */,
+				ED146AAE2A16B369007EC880 /* CreatingHabitViewController.swift */,
 			);
 			path = TrackerViews;
 			sourceTree = "<group>";
@@ -245,7 +245,7 @@
 				ED146ABF2A16B4C9007EC880 /* TrackersCollectionViewCell.swift in Sources */,
 				ED146ACE2A16B59B007EC880 /* Weekday.swift in Sources */,
 				ED146AD32A16B679007EC880 /* StatisticViewController.swift in Sources */,
-				ED146AAF2A16B369007EC880 /* ScheduleViewControllerDelegate.swift in Sources */,
+				ED146AAF2A16B369007EC880 /* CreatingHabitViewController.swift in Sources */,
 				ED146AB32A16B394007EC880 /* ScheduleTableViewCell.swift in Sources */,
 				ED146AB72A16B473007EC880 /* TabBarController.swift in Sources */,
 				ED146A992A16B29E007EC880 /* AppDelegate.swift in Sources */,
@@ -328,7 +328,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -382,7 +382,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

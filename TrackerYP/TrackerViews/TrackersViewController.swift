@@ -1,6 +1,6 @@
 import UIKit
 
-class TrackersViewController: UIViewController{
+class TrackersViewController: UIViewController, ThirdViewControllerDelegate {
     
     let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 140))
     let navItem = UINavigationItem()
@@ -53,6 +53,7 @@ class TrackersViewController: UIViewController{
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.layer.cornerRadius = 10
         textField.delegate = self
+        textField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         
         return textField
     }()
@@ -60,6 +61,8 @@ class TrackersViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotification), name: .thirdViewControllerDidDismiss, object: nil)
         
         let navigationController = UINavigationController(rootViewController: TrackersViewController())
         view.backgroundColor = .white
@@ -218,19 +221,40 @@ class TrackersViewController: UIViewController{
         ])
     }
     
+    func thirdViewControllerDidDismiss(_ creatingHabitViewController: CreatingHabitViewController) {
+        // Update the collection view
+        categories = MockData.categories
+        collectionView.reloadData()
+        updateCategories()
+
+    }
+    
+    @objc func handleNotification(_ notification: Notification) {
+        // Update the collection view
+        categories = MockData.categories
+        collectionView.reloadData()
+        updateCategories()
+    }
+    
     @objc func presentModalViewController() {
         let creatingTrackerVC = CreatingTrackerViewController()
         present(creatingTrackerVC, animated: true, completion: nil)
     }
     
     @objc private func dateChanged() {
+        categories = MockData.categories
+        collectionView.reloadData()
         let components = Calendar.current.dateComponents([.weekday], from: datePicker.date)
         if let day = components.weekday {
             currentDate = day
             updateCategories()
             //reloadVisibleCategories()
         }
-        
+    }
+    
+    @objc func textFieldChanged() {
+        searchText = searchField.text ?? ""
+        updateCategories()
     }
  
     private func reloadVisibleCategories() {

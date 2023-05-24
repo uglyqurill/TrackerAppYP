@@ -68,6 +68,10 @@ class MockData {
                     label: "Бег",
                     color: UIColor(hex: "#FF674D") ?? .gray,
                     emoji: "🏃‍♂️",
-                    dailySchedule: [.wednesday, .sunday])])
+                    dailySchedule: [.wednesday, .sunday])
+        ]),
+        
+        TrackerCategory(name: "Created", trackers: [
+        ])
     ]
 }

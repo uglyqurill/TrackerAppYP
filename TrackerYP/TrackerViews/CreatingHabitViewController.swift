@@ -1,10 +1,16 @@
 import UIKit
 
 protocol ScheduleViewControllerDelegate: AnyObject {
-    func didUpdateSchedule(selectedDays: [String])
+    func didUpdateSchedule(selectedDays: [WeekDay])
+}
+
+protocol ThirdViewControllerDelegate: AnyObject {
+    func thirdViewControllerDidDismiss(_ creatingHabitViewController: CreatingHabitViewController)
 }
 
 final class CreatingHabitViewController: UIViewController, UICollectionViewDelegate {
+    weak var delegate: ThirdViewControllerDelegate?
+    
     let scrollView = UIScrollView()
     let contentView = UIView()
     var selectionView = UIView()
@@ -17,8 +23,9 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     let cancelButton = UIButton()
     
     var trackerDate = ""
-    var selectedEmoji = ""
+    var selectedEmoji = "🌟"
     var selectedColor: UIColor = .gray
+    var trackerDays = [WeekDay]()
 
     let emojiCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     let colorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -207,6 +214,10 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
         
     }
     
+    func dailyScheduleHelper(selectedDays: [String]) {
+        
+    }
+    
     @objc func presentCreatingCategoryViewController() {
         // Функция для категорий
     }
@@ -223,8 +234,41 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     
     @objc func createTracker() {
         // Cоздание трекера
-        navigationController?.popToRootViewController(animated: true)
-        dismiss(animated: true)
+
+        let mockTracker = Tracker(
+            id: UUID(),
+            label: "New Tracker",
+            color: UIColor.gray,
+            emoji: "🌟",
+            dailySchedule: [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
+        )
+        
+        let newTracker = Tracker(
+            id: UUID(),
+            label: searchTrackerField.text ?? mockTracker.label,
+            color: selectedColor,
+            emoji: selectedEmoji,
+            dailySchedule: trackerDays
+        )
+
+        if let createdCategoryIndex = MockData.categories.firstIndex(where: { $0.name == "Created" }) {
+            // Create a copy of the "Created" category and modify the copy
+            var createdCategory = MockData.categories[createdCategoryIndex]
+            createdCategory.trackers.append(newTracker)
+
+            // Replace the original "Created" category with the modified copy
+            MockData.categories[createdCategoryIndex] = createdCategory
+        }
+        
+        delegate?.thirdViewControllerDidDismiss(self)
+        // Access the root view controller
+        let rootViewController = self.presentingViewController?.presentingViewController
+        // Dismiss the view controllers
+        rootViewController?.dismiss(animated: true, completion: nil)
+        
+        // Post the notification
+        NotificationCenter.default.post(name: .thirdViewControllerDidDismiss, object: nil)
+
     }
     
     @objc func textFieldDidChange() {
@@ -278,6 +322,8 @@ extension CreatingHabitViewController {
             selectedEmoji = emojies[indexPath.row]
         } else {
             guard let cell = colorCollectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell else { return }
+            cell.selectionView.layer.borderColor = UIColor(hex: colors[indexPath.row])?.withAlphaComponent(0.6).cgColor
+            
             cell.selectionView.isHidden = false
             selectedColor = UIColor(hex: colors[indexPath.row]) ?? UIColor(named: "ypGrey")!
         }
@@ -298,14 +344,25 @@ extension CreatingHabitViewController {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! SupplementaryView
-            headerView.titleLabel.text = "Emojis"
-            
-            return headerView
-        default:
-            fatalError("Unexpected element kind")
+        
+        if collectionView == emojiCollectionView {
+            switch kind {
+            case UICollectionView.elementKindSectionHeader:
+                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! SupplementaryView
+                headerView.titleLabel.text = "Emoji"
+                return headerView
+            default:
+                fatalError("Unexpected element kind")
+            }
+        } else {
+            switch kind {
+            case UICollectionView.elementKindSectionHeader:
+                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! SupplementaryView
+                headerView.titleLabel.text = "Цвет"
+                return headerView
+            default:
+                fatalError("Unexpected element kind")
+            }
         }
     }
 }
@@ -368,16 +425,18 @@ extension CreatingHabitViewController {
             colorCollectionView.topAnchor.constraint(equalTo: scheduleButton.bottomAnchor, constant: 270),
             colorCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 29),
             colorCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -29),
-            colorCollectionView.heightAnchor.constraint(equalToConstant: 192)
+            colorCollectionView.heightAnchor.constraint(equalToConstant: 200)
         ])
     }
 }
 
 // Метод делегата, изменяющий кнопку расписания
 extension CreatingHabitViewController: ScheduleViewControllerDelegate {
-    func didUpdateSchedule(selectedDays: [String]) {
-        let daysString = selectedDays.joined(separator: ", ")
+    func didUpdateSchedule(selectedDays: [WeekDay]) {
+        let selectedDaysStrings = selectedDays.map { $0.shortName }
+        let daysString = selectedDaysStrings.joined(separator: ", ")
         trackerDate = daysString
+        trackerDays = selectedDays
         
         guard daysString.isEmpty == false else {
             scheduleButton.titleLabel?.numberOfLines = 1
@@ -396,4 +455,8 @@ extension CreatingHabitViewController: ScheduleViewControllerDelegate {
         scheduleButton.setAttributedTitle(title, for: .normal)
         scheduleButton.setTitle(title.string, for: .normal)
     }
+}
+
+extension Notification.Name {
+    static let thirdViewControllerDidDismiss = Notification.Name("ThirdViewControllerDidDismiss")
 }
