@@ -6,7 +6,7 @@ class EmojiCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        titleLabel.font = UIFont(name: "HelveticaNeue", size: 34)
+        titleLabel.font = UIFont(name: "HelveticaNeue", size: 32)
         titleLabel.textAlignment = .center
         
         contentView.addSubview(titleLabel)
@@ -28,7 +28,7 @@ class EmojiCollectionViewCell: UICollectionViewCell {
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             titleLabel.heightAnchor.constraint(equalToConstant: 38),
-            titleLabel.widthAnchor.constraint(equalToConstant: 34),
+            titleLabel.widthAnchor.constraint(equalToConstant: 32),
             selectionView.heightAnchor.constraint(equalToConstant: 52),
             selectionView.widthAnchor.constraint(equalToConstant: 52),
             selectionView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),

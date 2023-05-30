@@ -106,41 +106,6 @@ extension ScheduleViewController: UITableViewDataSource {
         return cell
     }
     
-    /*
-    @objc func scheduleIsReady() {
-        var selectedDays = [String]()
-        
-        for section in 0..<tableView.numberOfSections {
-            if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: section)) as? ScheduleTableViewCell {
-                if cell.daySwitch.isOn {
-                    switch section {
-                    case 0:
-                        selectedDays.append("Пон")
-                    case 1:
-                        selectedDays.append("Вт")
-                    case 2:
-                        selectedDays.append("Ср")
-                    case 3:
-                        selectedDays.append("Чт")
-                    case 4:
-                        selectedDays.append("Пт")
-                    case 5:
-                        selectedDays.append("Сб")
-                    case 6:
-                        selectedDays.append("Вс")
-                    default:
-                        break
-                    }
-                }
-            }
-        }
-        print(selectedDays)
-        //let stringSelectedDays = selectedDays.compactMap { $0 as? String }
-        delegate?.didUpdateSchedule(selectedDays: selectedDays)
-        dismiss(animated: true, completion: nil)
-    }
-    */
-    
     @objc func scheduleIsReady() {
         var selectedDays = [WeekDay]()
         

@@ -91,7 +91,6 @@
 				ED146A982A16B29E007EC880 /* AppDelegate.swift */,
 				ED146A9A2A16B29E007EC880 /* SceneDelegate.swift */,
 				ED146AB52A16B3BA007EC880 /* TrackerViews */,
-				ED146AD42A16B686007EC880 /* StatisticView */,
 				ED146AB42A16B3A7007EC880 /* TrackersOptions */,
 				ED146AC22A16B4F5007EC880 /* TabBar */,
 				ED146AC32A16B503007EC880 /* CollectionView */,
@@ -119,6 +118,7 @@
 				ED146A9C2A16B29E007EC880 /* TrackersViewController.swift */,
 				ED146AAC2A16B357007EC880 /* CreatingTrackerViewController.swift */,
 				ED146AAE2A16B369007EC880 /* CreatingHabitViewController.swift */,
+				ED146AD42A16B686007EC880 /* StatisticView */,
 			);
 			path = TrackerViews;
 			sourceTree = "<group>";
