@@ -6,6 +6,7 @@ protocol ScheduleViewControllerDelegate: AnyObject {
 
 protocol ThirdViewControllerDelegate: AnyObject {
     func thirdViewControllerDidDismiss(_ creatingHabitViewController: CreatingHabitViewController)
+    func createTracker(_ tracker: Tracker, categoryName: String)
 }
 
 final class CreatingHabitViewController: UIViewController, UICollectionViewDelegate {
@@ -41,7 +42,6 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     let colors = ["#FD4C49", "#FF881E", "#007BFA", "#6E44FE", "#33CF69", "#E66DD4", "#F9D4D4", "#34A7FE", "#46E69D", "#35347C", "#FF674D", "#FF99CC", "#F6C48B", "#7994F5", "#832CF1", "#AD56DA", "#8D72E6", "#2FD058"]
     
     override func viewDidLoad() {
-
         view.backgroundColor = .white
         adjustElements()
     }
@@ -238,7 +238,7 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
         
         
         cancelButton.addTarget(self, action: #selector(cancelCreation), for: .touchUpInside)
-        createButton.addTarget(self, action: #selector(createTracker), for: .touchUpInside)
+        createButton.addTarget(self, action: #selector(createNewTracker), for: .touchUpInside)
         
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         createButton.translatesAutoresizingMaskIntoConstraints = false
@@ -275,20 +275,11 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
         dismiss(animated: true, completion: nil)
     }
     
-    @objc func createTracker() {
+    @objc func createNewTracker() {
         // Cоздание трекера
-
-        let mockTracker = Tracker(
-            id: UUID(),
-            label: "New Tracker",
-            color: UIColor.gray,
-            emoji: "🌟",
-            dailySchedule: [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
-        )
-        
         let newTracker = Tracker(
             id: UUID(),
-            label: searchTrackerField.text ?? mockTracker.label,
+            label: searchTrackerField.text ?? "Мой Трекер",
             color: selectedColor,
             emoji: selectedEmoji,
             dailySchedule: trackerDays
@@ -304,11 +295,11 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
         }
         
         delegate?.thirdViewControllerDidDismiss(self)
+        //delegate?.createTracker(newTracker, categoryName: "Важное")
         // Access the root view controller
         let rootViewController = self.presentingViewController?.presentingViewController
         // Dismiss the view controllers
         rootViewController?.dismiss(animated: true, completion: nil)
-        
         // Post the notification
         NotificationCenter.default.post(name: .thirdViewControllerDidDismiss, object: nil)
 
@@ -391,29 +382,6 @@ extension CreatingHabitViewController {
             selectedColor = UIColor(hex: colors[indexPath.row]) ?? UIColor(named: "ypGrey")!
         }
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//
-//        if collectionView == emojiCollectionView {
-//            switch kind {
-//            case UICollectionView.elementKindSectionHeader:
-//                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! SupplementaryView
-//                headerView.titleLabel.text = "Emoji"
-//                return headerView
-//            default:
-//                fatalError("Unexpected element kind")
-//            }
-//        } else {
-//            switch kind {
-//            case UICollectionView.elementKindSectionHeader:
-//                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! SupplementaryView
-//                headerView.titleLabel.text = "Цвет"
-//                return headerView
-//            default:
-//                fatalError("Unexpected element kind")
-//            }
-//        }
-//    }
 }
 
 extension CreatingHabitViewController: UICollectionViewDataSource {

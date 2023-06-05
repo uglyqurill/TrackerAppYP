@@ -1,9 +1,9 @@
 import UIKit
 
-struct Tracker {
+struct Tracker: Hashable {
      let id: UUID
      let label: String
-     let color: UIColor
-     let emoji: String
+     let color: UIColor?
+     let emoji: String?
      let dailySchedule: [WeekDay]?
  }

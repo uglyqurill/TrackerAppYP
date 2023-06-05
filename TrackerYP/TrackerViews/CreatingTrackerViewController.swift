@@ -70,3 +70,12 @@ final class CreatingTrackerViewController: UIViewController {
     }
     
 }
+
+extension CreatingHabitViewController: ThirdViewControllerDelegate {
+    func thirdViewControllerDidDismiss(_ creatingHabitViewController: CreatingHabitViewController) {
+    }
+    
+    func createTracker(_ tracker: Tracker, categoryName: String) {
+        delegate?.createTracker(tracker, categoryName: categoryName)
+    }
+}

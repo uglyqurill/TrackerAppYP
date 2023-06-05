@@ -2,6 +2,7 @@ import UIKit
 
 // MARK: Дополнение к UIColor, которое позволяет изменять цвет с помощью HEX номера
 extension UIColor {
+    
     convenience init?(hex: String) {
         var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")

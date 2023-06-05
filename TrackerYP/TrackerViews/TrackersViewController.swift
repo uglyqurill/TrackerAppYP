@@ -1,6 +1,8 @@
 import UIKit
 
 class TrackersViewController: UIViewController, ThirdViewControllerDelegate {
+    private let trackerCategoryStore = TrackerCategoryStore()
+    private let trackerRecordStore = TrackerRecordStore()
     
     let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 140))
     let navItem = UINavigationItem()
@@ -73,9 +75,12 @@ class TrackersViewController: UIViewController, ThirdViewControllerDelegate {
         // Create the third line
         setupSearchField()
         
+        //completedTrackers = try! self.trackerRecordStore.fetchTrackerRecord()
+        
         setDayOfWeek()
         updateCategories()
         setupTrackers()
+        //trackerCategoryStore.delegate = self
     }
     
     func setupNavBar() {
@@ -281,6 +286,26 @@ class TrackersViewController: UIViewController, ThirdViewControllerDelegate {
         collectionView.reloadData()
     }
     
+    func createTracker(
+        _ tracker: Tracker, categoryName: String
+    ) {
+        var categoryToUpdate: TrackerCategory?
+        let categories: [TrackerCategory] = trackerCategoryStore.trackerCategories
+        for i in 0..<categories.count {
+            if categories[i].name == categoryName {
+                categoryToUpdate = categories[i]
+            }
+        }
+        if categoryToUpdate != nil {
+            try? trackerCategoryStore.addTracker(tracker, to: categoryToUpdate!)
+        } else {
+            let newCategory = TrackerCategory(name: categoryName, trackers: [tracker])
+            categoryToUpdate = newCategory
+            try? trackerCategoryStore.addNewTrackerCategory(categoryToUpdate!)
+        }
+        updateCategories()
+        dismiss(animated: true)
+    }
 }
 
 extension TrackersViewController: UITextFieldDelegate {
@@ -319,11 +344,11 @@ extension TrackersViewController: UICollectionViewDataSource {
                        indexPath: indexPath,
                        completedDays: completedDays)
         
-        cell.setTrackerColor(tracker.color)
+        cell.setTrackerColor(tracker.color ?? .gray)
         cell.setTrackerId(tracker.id)
         cell.setTrackerName(tracker.label)
-        cell.setTrackerCheckButtonColor(tracker.color)
-        cell.setTrackerEmoji(tracker.emoji)
+        cell.setTrackerCheckButtonColor(tracker.color ?? .gray)
+        cell.setTrackerEmoji(tracker.emoji ?? ":)")
         
         return cell
     }
@@ -398,4 +423,12 @@ extension Date {
         Calendar.current.dateComponents([.year, .month, .day], from: self)
     }
 }
+
+extension TrackersViewController: TrackerCategoryStoreDelegate {
+    func store(_ store: TrackerCategoryStore, didUpdate update: TrackerCategoryStoreUpdate) {
+        visibleCategories = trackerCategoryStore.trackerCategories
+        collectionView.reloadData()
+    }
+}
+
 
