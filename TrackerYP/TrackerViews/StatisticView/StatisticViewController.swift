@@ -1,5 +1,5 @@
 import UIKit
 
 final class StatisticViewController: UIViewController {
-    //тут будет статистика 
+    //тут будет статистика
 }

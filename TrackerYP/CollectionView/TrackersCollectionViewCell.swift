@@ -1,11 +1,13 @@
 import UIKit
 
 protocol TrackersCollectionViewCellDelegate: AnyObject {
-    func completedTracker(id: UUID, at indexPath: IndexPath)
+    func completedTracker(id: UUID)
     func uncompleteTracker(id: UUID, at indexPath: IndexPath)
 }
 
 final class TrackersCollectionViewCell: UICollectionViewCell {
+    
+    static let identifier = "trackersCollectionViewCell"
 
     public weak var delegate: TrackersCollectionViewCellDelegate?
     private var isCompletedToday: Bool = false
@@ -177,9 +179,9 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         }
         
         if isCompletedToday {
-            delegate?.uncompleteTracker(id: trackerId, at: indexPath)
+            //delegate?.uncompleteTracker(id: trackerId, at: indexPath)
         } else {
-            delegate?.completedTracker(id: trackerId, at: indexPath)
+            delegate?.completedTracker(id: trackerId)
         }
     }
     

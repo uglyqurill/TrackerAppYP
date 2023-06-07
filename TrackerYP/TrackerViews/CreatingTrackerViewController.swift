@@ -1,79 +1,83 @@
 import UIKit
 
-final class CreatingTrackerViewController: UIViewController {
-    
-    let habitButton = UIButton()
-    let eventButton = UIButton()
-    let infoLabel = UILabel()
-    
-    override func viewDidLoad() {
-        view.backgroundColor = .white
-        adjustElements()
-    }
-    
-    func adjustElements() {
-        setLabel()
-        setButtons()
-    }
-    
-    func setLabel() {
-        infoLabel.text = "Создание трекера"
-        infoLabel.textColor = UIColor(named: "ypBlackDay")
-        
-        infoLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(infoLabel)
-        
-        NSLayoutConstraint.activate([
-            infoLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 27),
-            infoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
-    }
-    
-    func setButtons() {
-        habitButton.setTitle("Привычка", for: .normal)
-        eventButton.setTitle("Нерегулярное событие", for: .normal)
-        habitButton.layer.cornerRadius = 10
-        eventButton.layer.cornerRadius = 10
-        habitButton.clipsToBounds = true
-        eventButton.clipsToBounds = true
-        
-        habitButton.addTarget(self, action: #selector(presentCreatingHabitViewController), for: .touchUpInside)
-        
-        habitButton.backgroundColor = UIColor(named: "ypBlackDay")
-        eventButton.backgroundColor = UIColor(named: "ypBlackDay")
-        
-        habitButton.titleLabel?.textColor = .white
-        eventButton.titleLabel?.textColor = .white
-        
-        habitButton.translatesAutoresizingMaskIntoConstraints = false
-        eventButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(habitButton)
-        view.addSubview(eventButton)
-        
-        NSLayoutConstraint.activate([
-            habitButton.topAnchor.constraint(equalTo: infoLabel.bottomAnchor, constant: 295),
-            habitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            habitButton.widthAnchor.constraint(equalToConstant: 335),
-            habitButton.heightAnchor.constraint(equalToConstant: 60),
-            eventButton.widthAnchor.constraint(equalToConstant: 335),
-            eventButton.heightAnchor.constraint(equalToConstant: 60),
-            eventButton.topAnchor.constraint(equalTo: habitButton.bottomAnchor, constant: 16),
-            eventButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
-    }
-    
-    @objc func presentCreatingHabitViewController() {
-        let creatingHabitVC = CreatingHabitViewController()
-        present(creatingHabitVC, animated: true, completion: nil)
-    }
-    
+protocol CreateTrackerVCDelegate: AnyObject {
+    func createTracker(_ tracker: Tracker, categoryName: String)
 }
 
-extension CreatingHabitViewController: ThirdViewControllerDelegate {
-    func thirdViewControllerDidDismiss(_ creatingHabitViewController: CreatingHabitViewController) {
+class CreatingTrackerViewController: UIViewController {
+   
+    public weak var delegate: CreateTrackerVCDelegate?
+    
+    private lazy var label: UILabel = {
+        let label = UILabel()
+        label.textColor = .black
+        label.text = "Создание трекера"
+        label.font = .systemFont(ofSize: 16)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var createRegularEventButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Привычка", for: .normal)
+        button.backgroundColor = .ypBlack
+        button.layer.cornerRadius = 16
+        button.addTarget(self, action: #selector(regularEventButtonAction), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private lazy var createIrregularEventButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Нерегулярное событие", for: .normal)
+        button.backgroundColor = .ypBlack
+        button.layer.cornerRadius = 16
+        button.addTarget(self, action: #selector(regularEventButtonAction), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        addSubviews()
+        setupLayout()
     }
+    
+    
+    @objc private func regularEventButtonAction() {
+        let creatingHabitVC = CreatingHabitViewController()
+        creatingHabitVC.delegate = self
+        present(creatingHabitVC, animated: true)
+    }
+    
+    private func addSubviews() {
+        view.addSubview(label)
+        view.addSubview(createRegularEventButton)
+        view.addSubview(createIrregularEventButton)
+    }
+    
+    private func setupLayout() {
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 27),
+            
+            createRegularEventButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            createRegularEventButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            createRegularEventButton.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 295),
+            createRegularEventButton.widthAnchor.constraint(equalToConstant: 335),
+            createRegularEventButton.heightAnchor.constraint(equalToConstant: 60),
+            
+            createIrregularEventButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            createIrregularEventButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            createIrregularEventButton.topAnchor.constraint(equalTo: createRegularEventButton.bottomAnchor, constant: 16),
+            createIrregularEventButton.widthAnchor.constraint(equalToConstant: 335),
+            createIrregularEventButton.heightAnchor.constraint(equalToConstant: 60)
+        ])
+    }
+}
+
+extension CreatingTrackerViewController: CreateEventVCDelegate {
     
     func createTracker(_ tracker: Tracker, categoryName: String) {
         delegate?.createTracker(tracker, categoryName: categoryName)

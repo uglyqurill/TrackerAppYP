@@ -4,13 +4,12 @@ protocol ScheduleViewControllerDelegate: AnyObject {
     func didUpdateSchedule(selectedDays: [WeekDay])
 }
 
-protocol ThirdViewControllerDelegate: AnyObject {
-    func thirdViewControllerDidDismiss(_ creatingHabitViewController: CreatingHabitViewController)
+protocol CreateEventVCDelegate: AnyObject {
     func createTracker(_ tracker: Tracker, categoryName: String)
 }
 
 final class CreatingHabitViewController: UIViewController, UICollectionViewDelegate {
-    weak var delegate: ThirdViewControllerDelegate?
+    weak var delegate: CreateEventVCDelegate?
     
     let scrollView = UIScrollView()
     let contentView = UIView()
@@ -262,7 +261,8 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     }
     
     @objc func presentCreatingCategoryViewController() {
-        // Функция для категорий
+        let categoryVC = CategoryViewController()
+        present(categoryVC, animated: true, completion: nil)
     }
     
     @objc func presentScheduleViewController() {
@@ -275,7 +275,7 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
         dismiss(animated: true, completion: nil)
     }
     
-    @objc func createNewTracker() {
+    @objc func createNewTracker() { 
         // Cоздание трекера
         let newTracker = Tracker(
             id: UUID(),
@@ -285,24 +285,12 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
             dailySchedule: trackerDays
         )
 
-        if let createdCategoryIndex = MockData.categories.firstIndex(where: { $0.name == "Created" }) {
-            // Create a copy of the "Created" category and modify the copy
-            var createdCategory = MockData.categories[createdCategoryIndex]
-            createdCategory.trackers.append(newTracker)
-
-            // Replace the original "Created" category with the modified copy
-            MockData.categories[createdCategoryIndex] = createdCategory
-        }
-        
-        delegate?.thirdViewControllerDidDismiss(self)
-        //delegate?.createTracker(newTracker, categoryName: "Важное")
-        // Access the root view controller
+        delegate?.createTracker(newTracker, categoryName: "Important")
         let rootViewController = self.presentingViewController?.presentingViewController
         // Dismiss the view controllers
         rootViewController?.dismiss(animated: true, completion: nil)
         // Post the notification
         NotificationCenter.default.post(name: .thirdViewControllerDidDismiss, object: nil)
-
     }
     
     @objc func textFieldDidChange() {
@@ -479,3 +467,4 @@ extension CreatingHabitViewController: ScheduleViewControllerDelegate {
 extension Notification.Name {
     static let thirdViewControllerDidDismiss = Notification.Name("ThirdViewControllerDidDismiss")
 }
+

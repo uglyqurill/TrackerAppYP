@@ -6,7 +6,7 @@ enum DatabaseError: Error {
 }
 
 final class DatabaseManager {
-    private let modelName = "TrackerCoreData"
+    private let modelName = "Tracker"
     private lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: modelName)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in

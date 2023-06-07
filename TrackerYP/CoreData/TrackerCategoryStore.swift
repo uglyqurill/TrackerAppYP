@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 import CoreData
 
 enum TrackerCategoryStoreError: Error {
@@ -104,67 +105,46 @@ class TrackerCategoryStore: NSObject {
         try context.save()
     }
     
-//    func trackerCategory(from data: TrackerCategoryCoreData) throws -> TrackerCategory {
-//        guard let name = data.nameCategory else {
-//            throw TrackerCategoryStoreError.decodingErrorInvalidName
-//        }
-//        let trackers: [Tracker] = data.trackers?.compactMap { tracker in
-//            guard let trackerCoreData = (tracker as? TrackerCoreData) else { return nil }
-//            guard let id = trackerCoreData.id,
-//                  let label = trackerCoreData.label,
-//                  let color = trackerCoreData.color?.color,
-//                  let emoji = trackerCoreData.emoji else { return nil }
-//            return Tracker(
-//                id: id,
-//                label: label,
-//                color: color,
-//                emoji: emoji,
-//                schedule: trackerCoreData.schedule?.compactMap { WeekDay(rawValue: $0) }
-//            )
-//        } ?? []
-//        return TrackerCategory(
-//            name: name,
-//            trackers: trackers
-//        )
-//    }
+    var tracker1 = Tracker(id: UUID(),
+                           label: "Полить растение",
+                           color: UIColor(hex: "#33CF69") ?? .gray,
+                           emoji: "🏝",
+                           dailySchedule: [.wednesday, .saturday])
     
     func trackerCategory(from data: TrackerCategoryCoreData) throws -> TrackerCategory {
         guard let name = data.nameCategory else {
             throw TrackerCategoryStoreError.decodingErrorInvalidName
         }
         let trackers: [Tracker] = data.trackers?.compactMap { tracker in
-            if let trackerCoreData = tracker as? TrackerCoreData,
-               let id = trackerCoreData.id,
-               let label = trackerCoreData.label,
-               let color = trackerCoreData.color?.color,
-               let emoji = trackerCoreData.emoji {
-                return Tracker(
-                    id: id,
-                    label: label,
-                    color: color,
-                    emoji: emoji,
-                    dailySchedule: trackerCoreData.dailySchedule?.compactMap { WeekDay(rawValue: $0) }
-                )
-            }
-            return nil
+            guard let trackerCoreData = (tracker as? TrackerCoreData) else { return tracker1 }
+            guard let id = trackerCoreData.id,
+                  let label = trackerCoreData.label,
+                  let color = trackerCoreData.color?.color,
+                  let emoji = trackerCoreData.emoji else { return tracker1 }
+            return Tracker(
+                id: id,
+                label: label,
+                color: color,
+                emoji: emoji,
+                dailySchedule: trackerCoreData.dailySchedule?.compactMap { WeekDay(rawValue: $0) }
+            )
         } ?? []
         return TrackerCategory(
             name: name,
             trackers: trackers
         )
     }
-
 }
 
 extension TrackerCategoryStore {
     
-    func predicateFetch(nameTracker: String) -> [TrackerCategory] {
-        if nameTracker.isEmpty {
+    func predicateFetch(label: String) -> [TrackerCategory] {
+        if label.isEmpty {
             return trackerCategories
         } else {
             let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
             request.returnsObjectsAsFaults = false
-            request.predicate = NSPredicate(format: "ANY trackers.nameTracker CONTAINS[cd] %@", nameTracker)
+            request.predicate = NSPredicate(format: "ANY trackers.label CONTAINS[cd] %@", label)
             guard let trackerCategoriesCoreData = try? context.fetch(request) else { return [] }
             guard let categories = try? trackerCategoriesCoreData.map({ try self.trackerCategory(from: $0)})
             else { return [] }
