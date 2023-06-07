@@ -10,7 +10,8 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     let label = UILabel(frame: CGRect(x: 0, y: 40, width: 254, height: 41))
     //let middleText = UITextView()
     let plusButton = UIButton(type: .system)
-    let centreImage = UIImage(named: "StarHoop")
+    let hoopImage = UIImage(named: "StarHoop")
+    let thinkImage = UIImage(named: "ThinkngEmoji")
     var centreImageView = UIImageView()
     let qustionLabel = UILabel()
     
@@ -67,7 +68,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         
         let navigationController = UINavigationController(rootViewController: TrackersViewController())
         view.backgroundColor = .white
-        centreImageView.isHidden = true
+        
         // Create the navigation bar
         setupNavBar()
         // Create the second line
@@ -79,7 +80,10 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         setDayOfWeek()
         updateCategories()
         setupTrackers()
+        setupCentre()
         trackerCategoryStore.delegate = self
+        centreImageView.isHidden = true
+        qustionLabel.isHidden = true
     }
     
     func setupNavBar() {
@@ -143,15 +147,16 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     }
     
     func setupCentre() {
-        centreImageView.image = centreImage
+        centreImageView.image = hoopImage
         centreImageView.isHidden = false
         centreImageView.translatesAutoresizingMaskIntoConstraints = false
         
         qustionLabel.text = "Что будем отслеживать?"
         qustionLabel.font = UIFont(name: "HelveticaNeue", size: 14)
         qustionLabel.textAlignment = .center
+        qustionLabel.isHidden = false
         qustionLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+
         view.addSubview(centreImageView)
         view.addSubview(qustionLabel)
         
@@ -250,6 +255,15 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         searchText = searchField.text ?? ""
         //label.text = searchText.isEmpty ? "Что будем отслеживать?" : "Ничего не найдено"
         visibleCategories = trackerCategoryStore.predicateFetch(label: searchText)
+        if visibleCategories.isEmpty {
+            centreImageView.isHidden = false
+            qustionLabel.isHidden = false
+            centreImageView.image = thinkImage
+            qustionLabel.text = "Ничего не найдено"
+        } else {
+            centreImageView.isHidden = true
+            qustionLabel.isHidden = true
+        }
         collectionView.reloadData()
     }
 
