@@ -65,8 +65,6 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let navigationController = UINavigationController(rootViewController: TrackersViewController())
         view.backgroundColor = .white
         
         // Create the navigation bar

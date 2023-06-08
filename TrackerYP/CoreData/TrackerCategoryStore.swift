@@ -26,7 +26,6 @@ protocol TrackerCategoryStoreDelegate: AnyObject {
 
 class TrackerCategoryStore: NSObject {
     
-    static let shared = TrackerCategoryStore()
     private let trackerStore = TrackerStore()
     private let context: NSManagedObjectContext
     private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>!

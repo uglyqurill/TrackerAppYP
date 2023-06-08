@@ -4,7 +4,6 @@ import CoreData
 class TrackerRecordStore {
     
     private let context: NSManagedObjectContext
-    static let shared = TrackerRecordStore()
     
     convenience init() {
         let context = DatabaseManager.shared.context
