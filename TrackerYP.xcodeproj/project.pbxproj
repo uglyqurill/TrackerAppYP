@@ -36,6 +36,7 @@
 		ED146B372A2A8B72007EC880 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED146B362A2A8B72007EC880 /* DatabaseManager.swift */; };
 		ED146B392A2CAF19007EC880 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED146B382A2CAF19007EC880 /* StringExtension.swift */; };
 		ED37C0602A2E4CF600300F55 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C05F2A2E4CF600300F55 /* DateExtension.swift */; };
+		ED37C06F2A32191A00300F55 /* CreatingIrregularEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C06E2A32191A00300F55 /* CreatingIrregularEvent.swift */; };
 		ED5C29B32A2E12DF003AA6D0 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5C29B22A2E12DF003AA6D0 /* CategoryViewController.swift */; };
 		ED5C29B52A2E131B003AA6D0 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5C29B42A2E131B003AA6D0 /* CategoryTableViewCell.swift */; };
 		ED7A71F82A2CEB7F00AE906A /* UIColorExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7A71F72A2CEB7F00AE906A /* UIColorExt.swift */; };
@@ -73,6 +74,7 @@
 		ED146B362A2A8B72007EC880 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		ED146B382A2CAF19007EC880 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		ED37C05F2A2E4CF600300F55 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
+		ED37C06E2A32191A00300F55 /* CreatingIrregularEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatingIrregularEvent.swift; sourceTree = "<group>"; };
 		ED5C29B22A2E12DF003AA6D0 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		ED5C29B42A2E131B003AA6D0 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 		ED7A71F72A2CEB7F00AE906A /* UIColorExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExt.swift; sourceTree = "<group>"; };
@@ -108,8 +110,7 @@
 		ED146A972A16B29E007EC880 /* TrackerYP */ = {
 			isa = PBXGroup;
 			children = (
-				ED146A982A16B29E007EC880 /* AppDelegate.swift */,
-				ED146A9A2A16B29E007EC880 /* SceneDelegate.swift */,
+				ED37C06C2A31F8A600300F55 /* Application */,
 				ED5C29B62A2E1325003AA6D0 /* Category */,
 				ED146AB52A16B3BA007EC880 /* TrackerViews */,
 				ED146AB42A16B3A7007EC880 /* TrackersOptions */,
@@ -119,8 +120,7 @@
 				ED146AD12A16B5C1007EC880 /* Extra */,
 				ED146B2F2A290D71007EC880 /* CoreData */,
 				ED146AA62A16B29F007EC880 /* Info.plist */,
-				ED146AA12A16B29F007EC880 /* Assets.xcassets */,
-				ED146AA32A16B29F007EC880 /* LaunchScreen.storyboard */,
+				ED37C0702A321BB100300F55 /* Resources */,
 			);
 			path = TrackerYP;
 			sourceTree = "<group>";
@@ -140,6 +140,7 @@
 				ED146A9C2A16B29E007EC880 /* TrackersViewController.swift */,
 				ED146AAC2A16B357007EC880 /* CreatingTrackerViewController.swift */,
 				ED146AAE2A16B369007EC880 /* CreatingHabitViewController.swift */,
+				ED37C06E2A32191A00300F55 /* CreatingIrregularEvent.swift */,
 				ED146AD42A16B686007EC880 /* StatisticView */,
 			);
 			path = TrackerViews;
@@ -206,6 +207,24 @@
 				ED146B362A2A8B72007EC880 /* DatabaseManager.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		ED37C06C2A31F8A600300F55 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				ED146A982A16B29E007EC880 /* AppDelegate.swift */,
+				ED146A9A2A16B29E007EC880 /* SceneDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		ED37C0702A321BB100300F55 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				ED146AA12A16B29F007EC880 /* Assets.xcassets */,
+				ED146AA32A16B29F007EC880 /* LaunchScreen.storyboard */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		ED5C29B62A2E1325003AA6D0 /* Category */ = {
@@ -309,6 +328,7 @@
 				ED146AC52A16B516007EC880 /* Tracker.swift in Sources */,
 				ED146ACC2A16B578007EC880 /* UIColorExtension.swift in Sources */,
 				ED146AC72A16B528007EC880 /* TrackerCategory.swift in Sources */,
+				ED37C06F2A32191A00300F55 /* CreatingIrregularEvent.swift in Sources */,
 				ED146B372A2A8B72007EC880 /* DatabaseManager.swift in Sources */,
 				ED146A9B2A16B29E007EC880 /* SceneDelegate.swift in Sources */,
 				ED146B352A2A7C69007EC880 /* TrackerRecordStore.swift in Sources */,
@@ -384,6 +404,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -438,6 +459,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;

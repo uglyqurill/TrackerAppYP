@@ -246,14 +246,13 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         if let day = components.weekday {
             currentDate = day
             updateCategories()
-            //reloadVisibleCategories()
+            qustionLabel.isHidden = true
         }
     }
     
     
     @objc func textFieldChanged() {
         searchText = searchField.text ?? ""
-        //label.text = searchText.isEmpty ? "Что будем отслеживать?" : "Ничего не найдено"
         visibleCategories = trackerCategoryStore.predicateFetch(label: searchText)
         if visibleCategories.isEmpty {
             centreImageView.isHidden = false
@@ -361,7 +360,7 @@ extension TrackersViewController: UICollectionViewDataSource {
 
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     
-    func completedTracker(id: UUID) {
+    func completedTracker(id: UUID, at indexPath: IndexPath) {
         if let index = completedTrackers.firstIndex(where: { record in
             record.idTracker == id &&
             record.date.yearMonthDayComponents == datePicker.date.yearMonthDayComponents
@@ -372,7 +371,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             completedTrackers.append(TrackerRecord(idTracker: id, date: datePicker.date))
             try? trackerRecordStore.addNewTrackerRecord(TrackerRecord(idTracker: id, date: datePicker.date))
         }
-        collectionView.reloadData()
+        collectionView.reloadItems(at: [indexPath])
     }
     
     func uncompleteTracker(id: UUID, at indexPath: IndexPath) {

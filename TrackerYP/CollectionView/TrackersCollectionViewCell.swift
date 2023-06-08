@@ -1,7 +1,7 @@
 import UIKit
 
 protocol TrackersCollectionViewCellDelegate: AnyObject {
-    func completedTracker(id: UUID)
+    func completedTracker(id: UUID, at indexPath: IndexPath)
     func uncompleteTracker(id: UUID, at indexPath: IndexPath)
 }
 
@@ -82,12 +82,12 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
                    indexPath: IndexPath,
                    completedDays: Int) {
         self.isCompletedToday = isCompletedToday
+        setIsCompletedToday(isCompletedToday) // Add this line to update the completed image
         self.trackerId = tracker.id
         self.indexPath = indexPath
         let dayCount = dayText(day: completedDays)
         resultLabel.text = dayCount
         addElements()
-        
     }
 
     func addElements() {
@@ -152,7 +152,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     
     func setIsCompletedToday(_ completed: Bool) {
         isCompletedToday = completed
-        checkButton.setImage(isCompletedToday ? UIImage(systemName: "DoneButton")! : UIImage(systemName: "PlusButton")!, for: .normal)
+        checkButton.setImage(isCompletedToday ? doneImage : plusImage, for: .normal)
     }
     
     func setCheckButtonIsEnabled(_ isEnabled: Bool) {
@@ -179,9 +179,9 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         }
         
         if isCompletedToday {
-            //delegate?.uncompleteTracker(id: trackerId, at: indexPath)
+            delegate?.uncompleteTracker(id: trackerId, at: indexPath)
         } else {
-            delegate?.completedTracker(id: trackerId)
+            delegate?.completedTracker(id: trackerId, at: indexPath)
         }
     }
     

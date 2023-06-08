@@ -1,4 +1,4 @@
-import UIKit
+import UIKit.UIColor
 
 // MARK: Дополнение к UIColor, которое позволяет изменять цвет с помощью HEX номера
 extension UIColor {
