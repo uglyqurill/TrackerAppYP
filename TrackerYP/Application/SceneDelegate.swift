@@ -11,7 +11,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.backgroundColor = .white
         self.window = window
         
-        let tabBarController = TabBarController()
+        let tabBarController = TabBarViewController()
         tabBarController.tabBar.barTintColor = UIColor(named: "ypGrey")
         
         let trackersViewController = TrackersViewController()
@@ -26,7 +26,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         tabBarController.viewControllers = [trackersViewController, statisticViewController]
         
-        window.rootViewController = tabBarController
+        let onboardingViewController = OnboardingViewController()
+        window.rootViewController = onboardingViewController
+        
+        //window.rootViewController = tabBarController
+        
         window.makeKeyAndVisible()
     }
 

@@ -1,6 +1,6 @@
 import UIKit
 
-class TabBarController: UITabBarController {
+class TabBarViewController: UITabBarController {
     
     var window: UIWindow?
     
