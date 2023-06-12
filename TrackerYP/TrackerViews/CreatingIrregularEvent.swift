@@ -1,6 +1,7 @@
 import UIKit
 
 final class CreatingIrregularEvent: UIViewController, UICollectionViewDelegate {
+    
     weak var delegate: CreateEventVCDelegate?
     
     let scrollView = UIScrollView()
@@ -21,13 +22,20 @@ final class CreatingIrregularEvent: UIViewController, UICollectionViewDelegate {
     var selectedEmoji = "🌟"
     var selectedColor: UIColor = .gray
     var trackerDays = [WeekDay]()
-
+    var categorySubTitle: String = ""
+    
     let emojiCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     let colorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     let emojies = [ "🙂", "🏓", "❤️", "🐕", "🤔", "😪", "🥇", "🥦", "🙌", "😡", "👨‍🎓", "🥹", "🔥", "⏰", "🛌", "🎂", "👨‍💻", "📚"]
     
     let colors = ["#FD4C49", "#FF881E", "#007BFA", "#6E44FE", "#33CF69", "#E66DD4", "#F9D4D4", "#34A7FE", "#46E69D", "#35347C", "#FF674D", "#FF99CC", "#F6C48B", "#7994F5", "#832CF1", "#AD56DA", "#8D72E6", "#2FD058"]
+    
+    private var category: TrackerCategoryModel? = nil {
+        didSet {
+            isButtonEnabled()
+        }
+    }
     
     override func viewDidLoad() {
         view.backgroundColor = .white
@@ -221,7 +229,7 @@ final class CreatingIrregularEvent: UIViewController, UICollectionViewDelegate {
     }
     
     @objc func presentCreatingCategoryViewController() {
-        let categoryVC = CategoryViewController()
+        let categoryVC = CategoryViewController(delegate: self, selectedCategory: category)
         present(categoryVC, animated: true, completion: nil)
     }
     
@@ -242,7 +250,8 @@ final class CreatingIrregularEvent: UIViewController, UICollectionViewDelegate {
         delegate?.createTracker(newTracker, categoryName: "Important")
         let rootViewController = self.presentingViewController?.presentingViewController
         // Dismiss the view controllers
-        rootViewController?.dismiss(animated: true, completion: nil)
+        dismiss(animated: true)
+        //rootViewController?.dismiss(animated: true, completion: nil)
         // Post the notification
         NotificationCenter.default.post(name: .thirdViewControllerDidDismiss, object: nil)
     }
@@ -387,5 +396,14 @@ extension CreatingIrregularEvent {
             colorCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             colorCollectionView.heightAnchor.constraint(equalToConstant: 200)
         ])
+    }
+}
+
+extension CreatingIrregularEvent: CategoryListViewModelDelegate {
+    func createCategory(category: TrackerCategoryModel) {
+        self.category = category
+        let categoryString = category.name
+        categorySubTitle = categoryString
+        isButtonEnabled()
     }
 }

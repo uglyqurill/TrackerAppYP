@@ -77,6 +77,17 @@ class OnboardingViewController: UIPageViewController {
         return button
     }()
     
+//    lazy var labelPage: UILabel = {
+//        var label = UILabel()
+//        label.text = "Отслеживайте только то, что хотите"
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//        label.font = UIFont.boldSystemFont(ofSize: 32)
+//        label.textAlignment = .center
+//        label.numberOfLines = 2
+//        label.tintColor = UIColor(named: "ypBlack")
+//        return label
+//    }()
+    
     init() {
         let transitionStyle: UIPageViewController.TransitionStyle = .scroll
         let navigationOrientation: UIPageViewController.NavigationOrientation = .horizontal
@@ -92,6 +103,14 @@ class OnboardingViewController: UIPageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Проверяем, первый ли раз пользователь зашел в приложение, чтобы решить, показывать ли анбординг
+        // почему-то не работает 
+        if (UserDefaults.standard.bool(forKey: "notFirstInApp") == false) {
+            UserDefaults.standard.set(true, forKey: "notFirstInApp")
+        } else {
+            dismissOnboarding()
+        }
 
         dataSource = self
         delegate = self
@@ -105,6 +124,7 @@ class OnboardingViewController: UIPageViewController {
         
         view.addSubview(onboardingButton)
         view.addSubview(pageControl)
+        //view.addSubview(labelPage)
         
         NSLayoutConstraint.activate([
             onboardingButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -84),
@@ -161,6 +181,13 @@ extension OnboardingViewController: UIPageViewControllerDelegate {
         if let currrentViewController = pageViewController.viewControllers?.first,
            let currentIndex = pages.firstIndex(of: currrentViewController) {
             pageControl.currentPage = currentIndex
+            
+//            if currentIndex == 0 {
+//                labelPage.text = "Отслеживайте только то, что хотите"
+//            } else {
+//                labelPage.text = "Даже если это \nне литры воды и йога"
+//            }
         }
+        
     }
 }

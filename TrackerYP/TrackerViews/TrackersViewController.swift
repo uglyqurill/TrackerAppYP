@@ -8,7 +8,6 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     let navItem = UINavigationItem()
     let navItem2 = UINavigationItem()
     let label = UILabel(frame: CGRect(x: 0, y: 40, width: 254, height: 41))
-    //let middleText = UITextView()
     let plusButton = UIButton(type: .system)
     let hoopImage = UIImage(named: "StarHoop")
     let thinkImage = UIImage(named: "ThinkngEmoji")
@@ -17,8 +16,8 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     
     var currentDate: Int?
     var searchText: String = ""
-    var categories: [TrackerCategory] = [] //все категории
-    var visibleCategories: [TrackerCategory] = [] //категории, которые отображается при поиске и/или изменении дня недели
+    var categories: [TrackerCategoryModel] = [] //все категории
+    var visibleCategories: [TrackerCategoryModel] = [] //категории, которые отображается при поиске и/или изменении дня недели
     var completedTrackers: [TrackerRecord] = [] //трекеры, которые были «выполнены» в выбранную дату
     
     
@@ -183,7 +182,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     }
     
     private func updateCategories() {
-        var newCategories: [TrackerCategory] = []
+        var newCategories: [TrackerCategoryModel] = []
         visibleCategories = trackerCategoryStore.trackerCategories
         for category in visibleCategories {
             var newTrackers: [Tracker] = []
@@ -195,7 +194,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
                 }
             }
             if newTrackers.count > 0 {
-                let newCategory = TrackerCategory(name: category.name, trackers: newTrackers)
+                let newCategory = TrackerCategoryModel(name: category.name, trackers: newTrackers)
                 newCategories.append(newCategory)
             }
         }
@@ -215,13 +214,11 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     func setupTrackers() {
         // Define categories and trackers
 
-        
         collectionView.backgroundColor = .white
         collectionView.dataSource = self
         collectionView.delegate = self
         view.addSubview(collectionView)
 
-        
         // Add constraints to collection view
 
         NSLayoutConstraint.activate([
@@ -267,8 +264,8 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     func createTracker(
         _ tracker: Tracker, categoryName: String
     ) {
-        var categoryToUpdate: TrackerCategory?
-        let categories: [TrackerCategory] = trackerCategoryStore.trackerCategories
+        var categoryToUpdate: TrackerCategoryModel?
+        let categories: [TrackerCategoryModel] = trackerCategoryStore.trackerCategories
         for i in 0..<categories.count {
             if categories[i].name == categoryName {
                 categoryToUpdate = categories[i]
@@ -277,7 +274,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         if categoryToUpdate != nil {
             try? trackerCategoryStore.addTracker(tracker, to: categoryToUpdate!)
         } else {
-            let newCategory = TrackerCategory(name: categoryName, trackers: [tracker])
+            let newCategory = TrackerCategoryModel(name: categoryName, trackers: [tracker])
             categoryToUpdate = newCategory
             try? trackerCategoryStore.addNewTrackerCategory(categoryToUpdate!)
         }
@@ -287,12 +284,10 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
 }
 
 extension TrackersViewController: UITextFieldDelegate {
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
-    
 }
 
 // MARK: - UICollectionViewDataSource
@@ -341,12 +336,10 @@ extension TrackersViewController: UICollectionViewDataSource {
         
         // Set up the header view here
         headerView.titleLabel.text = visibleCategories[indexPath.section].name
-        
         return headerView
     }
     
     private func isTrackerCompletedToday(id: UUID) -> Bool {
-        
         completedTrackers.contains { trackerRecord in
             let isSameDay = Calendar.current.isDate(trackerRecord.date,
                                                     inSameDayAs: datePicker.date)
