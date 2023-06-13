@@ -405,5 +405,25 @@ extension CreatingIrregularEvent: CategoryListViewModelDelegate {
         let categoryString = category.name
         categorySubTitle = categoryString
         isButtonEnabled()
+        updateCategoryButton()
+    }
+    
+    func updateCategoryButton() {
+        guard categorySubTitle != "" else {
+            categoryButton.titleLabel?.numberOfLines = 1
+            categoryButton.setTitle("Категория", for: .normal)
+            return
+        }
+        
+        //categoryButton.tintColor = UIColor.clear
+        let firstLine = NSAttributedString(string: "Категория", attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "ypBlackDay") ?? .black])
+        let secondLine = NSAttributedString(string: "\n\(categorySubTitle)", attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "ypGrey") ?? .black])
+        let title = NSMutableAttributedString(attributedString: firstLine)
+        title.append(secondLine)
+        
+        categoryButton.titleLabel?.numberOfLines = 0
+        
+        categoryButton.setAttributedTitle(title, for: .normal)
+        categoryButton.setTitle(title.string, for: .normal)
     }
 }
