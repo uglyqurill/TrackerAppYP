@@ -15,7 +15,7 @@ class CategoryViewController: UIViewController {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "star")
+        imageView.image = UIImage(named: "StarHoop")
         return imageView
     }()
     
@@ -85,8 +85,9 @@ class CategoryViewController: UIViewController {
             
             imageView.widthAnchor.constraint(equalToConstant: 80),
             imageView.heightAnchor.constraint(equalToConstant: 80),
+            imageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 246),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            //imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             label.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
             label.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),

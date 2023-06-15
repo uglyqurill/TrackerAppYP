@@ -43,6 +43,7 @@
 		ED37C0CC2A37550900300F55 /* CategoryEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C0CB2A37550900300F55 /* CategoryEditViewController.swift */; };
 		ED37C0CE2A37551A00300F55 /* CategoryCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C0CD2A37551A00300F55 /* CategoryCreateViewController.swift */; };
 		ED37C0D02A37937B00300F55 /* TextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C0CF2A37937B00300F55 /* TextFieldExtension.swift */; };
+		ED37C0EC2A3B2D0400300F55 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = ED37C0EB2A3B2D0400300F55 /* Localizable.stringsdict */; };
 		ED5C29B32A2E12DF003AA6D0 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5C29B22A2E12DF003AA6D0 /* CategoryViewController.swift */; };
 		ED5C29B52A2E131B003AA6D0 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5C29B42A2E131B003AA6D0 /* CategoryTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -86,6 +87,7 @@
 		ED37C0CB2A37550900300F55 /* CategoryEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditViewController.swift; sourceTree = "<group>"; };
 		ED37C0CD2A37551A00300F55 /* CategoryCreateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCreateViewController.swift; sourceTree = "<group>"; };
 		ED37C0CF2A37937B00300F55 /* TextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldExtension.swift; sourceTree = "<group>"; };
+		ED37C0EB2A3B2D0400300F55 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
 		ED5C29B22A2E12DF003AA6D0 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		ED5C29B42A2E131B003AA6D0 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -232,6 +234,7 @@
 		ED37C0702A321BB100300F55 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				ED37C0ED2A3B2D1800300F55 /* Locale */,
 				ED146AA12A16B29F007EC880 /* Assets.xcassets */,
 				ED146AA32A16B29F007EC880 /* LaunchScreen.storyboard */,
 			);
@@ -253,6 +256,14 @@
 				ED37C0CD2A37551A00300F55 /* CategoryCreateViewController.swift */,
 			);
 			path = CategoryViewControllers;
+			sourceTree = "<group>";
+		};
+		ED37C0ED2A3B2D1800300F55 /* Locale */ = {
+			isa = PBXGroup;
+			children = (
+				ED37C0EB2A3B2D0400300F55 /* Localizable.stringsdict */,
+			);
+			path = Locale;
 			sourceTree = "<group>";
 		};
 		ED5C29B62A2E1325003AA6D0 /* CategorySelection */ = {
@@ -327,6 +338,7 @@
 			files = (
 				ED146AA52A16B29F007EC880 /* LaunchScreen.storyboard in Resources */,
 				ED146AA22A16B29F007EC880 /* Assets.xcassets in Resources */,
+				ED37C0EC2A3B2D0400300F55 /* Localizable.stringsdict in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

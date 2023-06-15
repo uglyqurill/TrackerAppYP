@@ -290,12 +290,9 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
             dailySchedule: trackerDays
         )
 
-        delegate?.createTracker(newTracker, categoryName: "Important")
+        delegate?.createTracker(newTracker, categoryName: category?.name ?? "Без категории")
         let rootViewController = self.presentingViewController?.presentingViewController
-        // Dismiss the view controllers
         dismiss(animated: true)
-//        rootViewController?.dismiss(animated: true, completion: nil)
-        // Post the notification
         NotificationCenter.default.post(name: .thirdViewControllerDidDismiss, object: nil)
     }
     

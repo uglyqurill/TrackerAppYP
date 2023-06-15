@@ -27,10 +27,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         tabBarController.viewControllers = [trackersViewController, statisticViewController]
         
         let onboardingViewController = OnboardingViewController()
-        window.rootViewController = onboardingViewController
         
-        //window.rootViewController = tabBarController
-        
+        if (UserDefaults.standard.bool(forKey: "notFirstInApp") == false) {
+            window.rootViewController = onboardingViewController
+        } else {
+            window.rootViewController = tabBarController
+        }
+       
         window.makeKeyAndVisible()
     }
 

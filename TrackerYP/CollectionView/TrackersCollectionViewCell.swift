@@ -160,15 +160,22 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     }
     
     func dayText(day: Int) -> String {
-        let num = day % 10
-        var resultText = "\(day)"
-        if num == 1 {
-            resultText += " день"
-        } else if num == 2 || num == 3 || num == 4 {
-            resultText += " дня"
-        } else {
-            resultText += " дней"
-        }
+//        let num = day % 10
+//        var resultText = "\(day)"
+//        if num == 1 {
+//            resultText += " день"
+//        } else if num == 2 || num == 3 || num == 4 {
+//            resultText += " дня"
+//        } else {
+//            resultText += " дней"
+//        }
+        
+        let tasksRemaining = day // Для простоты примера используем числовой литерал
+        let resultText = String.localizedStringWithFormat(
+            NSLocalizedString("daysОfRepetitions", comment: "Number of repetition days"),
+            tasksRemaining
+        )
+        
         return resultText
     }
 

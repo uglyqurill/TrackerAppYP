@@ -247,7 +247,7 @@ final class CreatingIrregularEvent: UIViewController, UICollectionViewDelegate {
             dailySchedule: ([.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday])
         )
 
-        delegate?.createTracker(newTracker, categoryName: "Important")
+        delegate?.createTracker(newTracker, categoryName: category?.name ?? "Без категории")
         let rootViewController = self.presentingViewController?.presentingViewController
         // Dismiss the view controllers
         dismiss(animated: true)

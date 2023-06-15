@@ -105,13 +105,7 @@ class OnboardingViewController: UIPageViewController {
         super.viewDidLoad()
         
         // Проверяем, первый ли раз пользователь зашел в приложение, чтобы решить, показывать ли анбординг
-        // почему-то не работает 
-        if (UserDefaults.standard.bool(forKey: "notFirstInApp") == false) {
-            UserDefaults.standard.set(true, forKey: "notFirstInApp")
-        } else {
-            dismissOnboarding()
-        }
-
+        UserDefaults.standard.set(true, forKey: "notFirstInApp")
         dataSource = self
         delegate = self
 
