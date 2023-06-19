@@ -5,7 +5,7 @@ final class SplashScreenViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .green
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-        let tabBar = TabBarController()
+        let tabBar = TabBarViewController()
         tabBar.awakeFromNib()
         window.rootViewController = tabBar
     }

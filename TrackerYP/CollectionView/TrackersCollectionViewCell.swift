@@ -6,6 +6,8 @@ protocol TrackersCollectionViewCellDelegate: AnyObject {
 }
 
 final class TrackersCollectionViewCell: UICollectionViewCell {
+    
+    static let identifier = "trackersCollectionViewCell"
 
     public weak var delegate: TrackersCollectionViewCellDelegate?
     private var isCompletedToday: Bool = false
@@ -80,12 +82,12 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
                    indexPath: IndexPath,
                    completedDays: Int) {
         self.isCompletedToday = isCompletedToday
+        setIsCompletedToday(isCompletedToday) // Add this line to update the completed image
         self.trackerId = tracker.id
         self.indexPath = indexPath
         let dayCount = dayText(day: completedDays)
         resultLabel.text = dayCount
         addElements()
-        
     }
 
     func addElements() {
@@ -150,7 +152,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     
     func setIsCompletedToday(_ completed: Bool) {
         isCompletedToday = completed
-        checkButton.setImage(isCompletedToday ? UIImage(systemName: "DoneButton")! : UIImage(systemName: "PlusButton")!, for: .normal)
+        checkButton.setImage(isCompletedToday ? doneImage : plusImage, for: .normal)
     }
     
     func setCheckButtonIsEnabled(_ isEnabled: Bool) {
@@ -158,15 +160,22 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     }
     
     func dayText(day: Int) -> String {
-        let num = day % 10
-        var resultText = "\(day)"
-        if num == 1 {
-            resultText += " день"
-        } else if num == 2 || num == 3 || num == 4 {
-            resultText += " дня"
-        } else {
-            resultText += " дней"
-        }
+//        let num = day % 10
+//        var resultText = "\(day)"
+//        if num == 1 {
+//            resultText += " день"
+//        } else if num == 2 || num == 3 || num == 4 {
+//            resultText += " дня"
+//        } else {
+//            resultText += " дней"
+//        }
+        
+        let tasksRemaining = day // Для простоты примера используем числовой литерал
+        let resultText = String.localizedStringWithFormat(
+            NSLocalizedString("daysОfRepetitions", comment: "Number of repetition days"),
+            tasksRemaining
+        )
+        
         return resultText
     }
 

@@ -11,7 +11,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.backgroundColor = .white
         self.window = window
         
-        let tabBarController = TabBarController()
+        let tabBarController = TabBarViewController()
         tabBarController.tabBar.barTintColor = UIColor(named: "ypGrey")
         
         let trackersViewController = TrackersViewController()
@@ -26,7 +26,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         tabBarController.viewControllers = [trackersViewController, statisticViewController]
         
-        window.rootViewController = tabBarController
+        let onboardingViewController = OnboardingViewController()
+        
+        if (UserDefaults.standard.bool(forKey: "notFirstInApp") == false) {
+            window.rootViewController = onboardingViewController
+        } else {
+            window.rootViewController = tabBarController
+        }
+       
         window.makeKeyAndVisible()
     }
 
@@ -53,9 +60,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        // Called as the scene transitions from the foreground to the background.
-        // Use this method to save data, release shared resources, and store enough scene-specific state information
-        // to restore the scene back to its current state.
+        DatabaseManager.shared.saveContext()
     }
 
 

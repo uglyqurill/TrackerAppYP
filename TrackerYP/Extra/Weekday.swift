@@ -1,3 +1,5 @@
+import Foundation
+
 enum WeekDay: String, CaseIterable {
     case monday = "Понедельник"
     case tuesday = "Вторник"
@@ -9,7 +11,6 @@ enum WeekDay: String, CaseIterable {
     
     var shortName: String {
         switch self {
-            
         case .monday:
             return "Пн"
         case .tuesday:
@@ -46,4 +47,5 @@ enum WeekDay: String, CaseIterable {
             return 1
         }
     }
+    
 }

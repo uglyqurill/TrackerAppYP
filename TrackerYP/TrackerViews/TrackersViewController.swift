@@ -1,20 +1,23 @@
 import UIKit
 
-class TrackersViewController: UIViewController{
+class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
+    private let trackerCategoryStore = TrackerCategoryStore()
+    private let trackerRecordStore = TrackerRecordStore()
     
     let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 140))
     let navItem = UINavigationItem()
     let navItem2 = UINavigationItem()
     let label = UILabel(frame: CGRect(x: 0, y: 40, width: 254, height: 41))
     let plusButton = UIButton(type: .system)
-    let centreImage = UIImage(named: "StarHoop")
+    let hoopImage = UIImage(named: "StarHoop")
+    let thinkImage = UIImage(named: "ThinkngEmoji")
     var centreImageView = UIImageView()
     let qustionLabel = UILabel()
     
     var currentDate: Int?
     var searchText: String = ""
-    var categories: [TrackerCategory] = MockData.categories //все категории
-    var visibleCategories: [TrackerCategory] = [] //категории, которые отображается при поиске и/или изменении дня недели
+    var categories: [TrackerCategoryModel] = [] //все категории
+    var visibleCategories: [TrackerCategoryModel] = [] //категории, которые отображается при поиске и/или изменении дня недели
     var completedTrackers: [TrackerRecord] = [] //трекеры, которые были «выполнены» в выбранную дату
     
     
@@ -53,6 +56,7 @@ class TrackersViewController: UIViewController{
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.layer.cornerRadius = 10
         textField.delegate = self
+        textField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         
         return textField
     }()
@@ -60,9 +64,8 @@ class TrackersViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let navigationController = UINavigationController(rootViewController: TrackersViewController())
         view.backgroundColor = .white
+        
         // Create the navigation bar
         setupNavBar()
         // Create the second line
@@ -70,9 +73,14 @@ class TrackersViewController: UIViewController{
         // Create the third line
         setupSearchField()
         
+        completedTrackers = try! self.trackerRecordStore.fetchTrackerRecord()
         setDayOfWeek()
         updateCategories()
         setupTrackers()
+        setupCentre()
+        trackerCategoryStore.delegate = self
+        centreImageView.isHidden = true
+        qustionLabel.isHidden = true
     }
     
     func setupNavBar() {
@@ -136,14 +144,16 @@ class TrackersViewController: UIViewController{
     }
     
     func setupCentre() {
-        centreImageView.image = centreImage
+        centreImageView.image = hoopImage
+        centreImageView.isHidden = false
         centreImageView.translatesAutoresizingMaskIntoConstraints = false
         
         qustionLabel.text = "Что будем отслеживать?"
         qustionLabel.font = UIFont(name: "HelveticaNeue", size: 14)
         qustionLabel.textAlignment = .center
+        qustionLabel.isHidden = false
         qustionLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+
         view.addSubview(centreImageView)
         view.addSubview(qustionLabel)
         
@@ -172,18 +182,19 @@ class TrackersViewController: UIViewController{
     }
     
     private func updateCategories() {
-        var newCategories: [TrackerCategory] = []
-        for category in categories {
+        var newCategories: [TrackerCategoryModel] = []
+        visibleCategories = trackerCategoryStore.trackerCategories
+        for category in visibleCategories {
             var newTrackers: [Tracker] = []
-            for tracker in category.trackers {
+            for tracker in category.visibleTrackers(filterString: searchText) {
                 guard let schedule = tracker.dailySchedule else { return }
                 let scheduleInts = schedule.map { $0.numberOfDay }
-                if let day = currentDate, scheduleInts.contains(day) &&  (searchText.isEmpty || tracker.label.contains(searchText)) {
+                if let day = currentDate, scheduleInts.contains(day) {
                     newTrackers.append(tracker)
                 }
             }
             if newTrackers.count > 0 {
-                let newCategory = TrackerCategory(name: category.name, trackers: newTrackers)
+                let newCategory = TrackerCategoryModel(name: category.name, trackers: newTrackers)
                 newCategories.append(newCategory)
             }
         }
@@ -193,21 +204,21 @@ class TrackersViewController: UIViewController{
     }
     
     private func reloadPlaceholder() {
-        if categories.isEmpty {
+        if visibleCategories.isEmpty {
             setupCentre()
+        } else {
+            centreImageView.isHidden = true
         }
     }
     
     func setupTrackers() {
         // Define categories and trackers
 
-        
         collectionView.backgroundColor = .white
         collectionView.dataSource = self
         collectionView.delegate = self
         view.addSubview(collectionView)
 
-        
         // Add constraints to collection view
 
         NSLayoutConstraint.activate([
@@ -220,66 +231,78 @@ class TrackersViewController: UIViewController{
     
     @objc func presentModalViewController() {
         let creatingTrackerVC = CreatingTrackerViewController()
+        creatingTrackerVC.delegate = self
         present(creatingTrackerVC, animated: true, completion: nil)
     }
     
     @objc private func dateChanged() {
+        collectionView.reloadData()
         let components = Calendar.current.dateComponents([.weekday], from: datePicker.date)
         if let day = components.weekday {
             currentDate = day
             updateCategories()
-            //reloadVisibleCategories()
+            qustionLabel.isHidden = true
         }
-        
-    }
- 
-    private func reloadVisibleCategories() {
-        let calendar = Calendar.current
-        let filterWeekday = calendar.component(.weekday, from: datePicker.date)
-        let filterText = (searchField.text ?? "").lowercased()
-        
-        visibleCategories = categories.map { category in
-            let trackers = category.trackers.filter { tracker in
-                let textCondition = filterText.isEmpty ||
-                tracker.label.lowercased().contains(filterText)
-                let dateCondition = tracker.dailySchedule?.contains { weekDay in
-                    weekDay.numberOfDay == filterWeekday
-                } == true
-                
-                return textCondition && (dateCondition != nil)
-            }
-            
-            return TrackerCategory(
-                name: category.name,
-                trackers: trackers)
-        }
-        
-        collectionView.reloadData()
     }
     
+    
+    @objc func textFieldChanged() {
+        searchText = searchField.text ?? ""
+        visibleCategories = trackerCategoryStore.predicateFetch(label: searchText)
+        if visibleCategories.isEmpty {
+            centreImageView.isHidden = false
+            qustionLabel.isHidden = false
+            centreImageView.image = thinkImage
+            qustionLabel.text = "Ничего не найдено"
+        } else {
+            centreImageView.isHidden = true
+            qustionLabel.isHidden = true
+        }
+        collectionView.reloadData()
+    }
+
+    func createTracker(
+        _ tracker: Tracker, categoryName: String
+    ) {
+        var categoryToUpdate: TrackerCategoryModel?
+        let categories: [TrackerCategoryModel] = trackerCategoryStore.trackerCategories
+        for i in 0..<categories.count {
+            if categories[i].name == categoryName {
+                categoryToUpdate = categories[i]
+            }
+        }
+        if categoryToUpdate != nil {
+            try? trackerCategoryStore.addTracker(tracker, to: categoryToUpdate!)
+        } else {
+            let newCategory = TrackerCategoryModel(name: categoryName, trackers: [tracker])
+            categoryToUpdate = newCategory
+            try? trackerCategoryStore.addNewTrackerCategory(categoryToUpdate!)
+        }
+        updateCategories()
+        dismiss(animated: true)
+    }
 }
 
 extension TrackersViewController: UITextFieldDelegate {
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        reloadVisibleCategories()
-        
         return true
     }
-    
 }
 
 // MARK: - UICollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // Return the number of categories you want to display
-        return visibleCategories.count
+        let count = visibleCategories.count
+        collectionView.isHidden = count == 0
+        return count
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // Return the number of trackers in the current category
-        return visibleCategories[section].trackers.count
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        return visibleCategories[section].visibleTrackers(filterString: searchText).count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -287,7 +310,10 @@ extension TrackersViewController: UICollectionViewDataSource {
         cell.delegate = self
         let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
         
-        let isCompletedToday = isTrackerCompletedToday(id: tracker.id)
+        let isCompletedToday = completedTrackers.contains(where: { record in
+            record.idTracker == tracker.id &&
+            record.date.yearMonthDayComponents == datePicker.date.yearMonthDayComponents
+        })
         
         let completedDays = completedTrackers.filter { $0.idTracker == tracker.id }.count
         cell.configure(with: tracker,
@@ -295,11 +321,11 @@ extension TrackersViewController: UICollectionViewDataSource {
                        indexPath: indexPath,
                        completedDays: completedDays)
         
-        cell.setTrackerColor(tracker.color)
+        cell.setTrackerColor(tracker.color ?? .gray)
         cell.setTrackerId(tracker.id)
         cell.setTrackerName(tracker.label)
-        cell.setTrackerCheckButtonColor(tracker.color)
-        cell.setTrackerEmoji(tracker.emoji)
+        cell.setTrackerCheckButtonColor(tracker.color ?? .gray)
+        cell.setTrackerEmoji(tracker.emoji ?? ":)")
         
         return cell
     }
@@ -310,12 +336,10 @@ extension TrackersViewController: UICollectionViewDataSource {
         
         // Set up the header view here
         headerView.titleLabel.text = visibleCategories[indexPath.section].name
-        
         return headerView
     }
     
     private func isTrackerCompletedToday(id: UUID) -> Bool {
-        
         completedTrackers.contains { trackerRecord in
             let isSameDay = Calendar.current.isDate(trackerRecord.date,
                                                     inSameDayAs: datePicker.date)
@@ -326,10 +350,18 @@ extension TrackersViewController: UICollectionViewDataSource {
 }
 
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
+    
     func completedTracker(id: UUID, at indexPath: IndexPath) {
-        let trackerRecord = TrackerRecord(idTracker: id, date: datePicker.date)
-        completedTrackers.append(trackerRecord)
-        
+        if let index = completedTrackers.firstIndex(where: { record in
+            record.idTracker == id &&
+            record.date.yearMonthDayComponents == datePicker.date.yearMonthDayComponents
+        }) {
+            completedTrackers.remove(at: index)
+            try? trackerRecordStore.deleteTrackerRecord(TrackerRecord(idTracker: id, date: datePicker.date))
+        } else {
+            completedTrackers.append(TrackerRecord(idTracker: id, date: datePicker.date))
+            try? trackerRecordStore.addNewTrackerRecord(TrackerRecord(idTracker: id, date: datePicker.date))
+        }
         collectionView.reloadItems(at: [indexPath])
     }
     
@@ -339,7 +371,6 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
                                                     inSameDayAs: datePicker.date)
             return trackerRecord.idTracker == id && isSameDay
         }
-        
         collectionView.reloadItems(at: [indexPath])
     }
 }
@@ -349,7 +380,6 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         return CGSize(width: 167, height: 148)
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -369,9 +399,10 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension Date {
-    var yearMonthDayComponents: DateComponents {
-        Calendar.current.dateComponents([.year, .month, .day], from: self)
+extension TrackersViewController: TrackerCategoryStoreDelegate {
+    func store(_ store: TrackerCategoryStore, didUpdate update: TrackerCategoryStoreUpdate) {
+        visibleCategories = trackerCategoryStore.trackerCategories
+        collectionView.reloadData()
     }
 }
 
