@@ -65,6 +65,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        //view.backgroundColor = .black
         
         // Create the navigation bar
         setupNavBar()
@@ -73,7 +74,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         // Create the third line
         setupSearchField()
         
-        completedTrackers = try! self.trackerRecordStore.fetchTrackerRecord()
+        completedTrackers = trackerRecordStore.trackerRecords
         setDayOfWeek()
         updateCategories()
         setupTrackers()
@@ -103,7 +104,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         ])
         
         NSLayoutConstraint.activate([
-            plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 17),
+            plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             plusButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 18),
             plusButton.widthAnchor.constraint(equalToConstant: 19),
             plusButton.heightAnchor.constraint(equalToConstant: 18)
@@ -230,6 +231,8 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     }
     
     @objc func presentModalViewController() {
+        print("ХУЙ")
+        print(trackerRecordStore.self)
         let creatingTrackerVC = CreatingTrackerViewController()
         creatingTrackerVC.delegate = self
         present(creatingTrackerVC, animated: true, completion: nil)
@@ -357,18 +360,19 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             record.date.yearMonthDayComponents == datePicker.date.yearMonthDayComponents
         }) {
             completedTrackers.remove(at: index)
-            try? trackerRecordStore.deleteTrackerRecord(TrackerRecord(idTracker: id, date: datePicker.date))
+            try? trackerRecordStore.deleteTrackerRecord(with: id)
         } else {
             completedTrackers.append(TrackerRecord(idTracker: id, date: datePicker.date))
             try? trackerRecordStore.addNewTrackerRecord(TrackerRecord(idTracker: id, date: datePicker.date))
         }
-        collectionView.reloadItems(at: [indexPath])
+        collectionView.reloadData()
     }
     
     func uncompleteTracker(id: UUID, at indexPath: IndexPath) {
         completedTrackers.removeAll { trackerRecord in
             let isSameDay = Calendar.current.isDate(trackerRecord.date,
                                                     inSameDayAs: datePicker.date)
+            try? trackerRecordStore.deleteTrackerRecord(with: id)
             return trackerRecord.idTracker == id && isSameDay
         }
         collectionView.reloadItems(at: [indexPath])
@@ -402,6 +406,13 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 extension TrackersViewController: TrackerCategoryStoreDelegate {
     func store(_ store: TrackerCategoryStore, didUpdate update: TrackerCategoryStoreUpdate) {
         visibleCategories = trackerCategoryStore.trackerCategories
+        collectionView.reloadData()
+    }
+}
+
+extension TrackersViewController: TrackerRecordStoreDelegate {
+    func store(_ store: TrackerRecordStore, didUpdate update: TrackerRecordStoreUpdate) {
+        completedTrackers = trackerRecordStore.trackerRecords
         collectionView.reloadData()
     }
 }
