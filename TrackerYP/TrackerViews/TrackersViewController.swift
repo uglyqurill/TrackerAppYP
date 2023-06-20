@@ -231,7 +231,6 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     }
     
     @objc func presentModalViewController() {
-        print("ХУЙ")
         print(trackerRecordStore.self)
         let creatingTrackerVC = CreatingTrackerViewController()
         creatingTrackerVC.delegate = self

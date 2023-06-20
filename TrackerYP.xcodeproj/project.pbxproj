@@ -47,6 +47,7 @@
 		ED37C1012A3F755A00300F55 /* SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C1002A3F755A00300F55 /* SnapshotTests.swift */; };
 		ED37C1172A3F794700300F55 /* TrackerYPTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C1162A3F794700300F55 /* TrackerYPTests.swift */; };
 		ED37C11F2A3F799700300F55 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = ED37C11E2A3F799700300F55 /* SnapshotTesting */; };
+		ED37C1212A41E81600300F55 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C1202A41E81600300F55 /* UIViewExtension.swift */; };
 		ED5C29B32A2E12DF003AA6D0 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5C29B22A2E12DF003AA6D0 /* CategoryViewController.swift */; };
 		ED5C29B52A2E131B003AA6D0 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5C29B42A2E131B003AA6D0 /* CategoryTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -104,6 +105,7 @@
 		ED37C1002A3F755A00300F55 /* SnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotTests.swift; sourceTree = "<group>"; };
 		ED37C1142A3F794700300F55 /* TrackerYPTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerYPTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED37C1162A3F794700300F55 /* TrackerYPTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerYPTests.swift; sourceTree = "<group>"; };
+		ED37C1202A41E81600300F55 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		ED5C29B22A2E12DF003AA6D0 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		ED5C29B42A2E131B003AA6D0 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -220,6 +222,7 @@
 			isa = PBXGroup;
 			children = (
 				ED146ACB2A16B578007EC880 /* UIColorExtension.swift */,
+				ED37C1202A41E81600300F55 /* UIViewExtension.swift */,
 				ED146B382A2CAF19007EC880 /* StringExtension.swift */,
 				ED37C0CF2A37937B00300F55 /* TextFieldExtension.swift */,
 				ED37C05F2A2E4CF600300F55 /* DateExtension.swift */,
@@ -462,6 +465,7 @@
 				ED146A9B2A16B29E007EC880 /* SceneDelegate.swift in Sources */,
 				ED146B352A2A7C69007EC880 /* TrackerRecordStore.swift in Sources */,
 				ED146AC12A16B4DD007EC880 /* SupplementaryView.swift in Sources */,
+				ED37C1212A41E81600300F55 /* UIViewExtension.swift in Sources */,
 				ED37C0962A34962800300F55 /* OnboardingPageViewController.swift in Sources */,
 				ED146ABD2A16B4A7007EC880 /* ColorCollectionViewCell.swift in Sources */,
 				ED146AAD2A16B357007EC880 /* CreatingTrackerViewController.swift in Sources */,

@@ -62,13 +62,12 @@ final class StatisticViewController: UIViewController {
         return textLabel
     }()
     
-
-    
     var trackerRecordStore = TrackerRecordStore()
     var completedTrackers: [TrackerRecord] = []
     
     override func viewDidLoad() {
-        
+        super.viewDidLoad()
+        view.backgroundColor = .white
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,13 +81,11 @@ final class StatisticViewController: UIViewController {
     func adjustElements() {
         setupLabel()
 
-
         if completedTrackers.isEmpty {
             setupCentre()
         } else {
             setupStatisticView()
         }
-        
     }
     
     func setupLabel() {
@@ -138,26 +135,6 @@ final class StatisticViewController: UIViewController {
             statNameLabel.heightAnchor.constraint(equalToConstant: 18)
         ])
     }
-}
-
-extension UIView {
-
-        func addGradientBorder(colors: [UIColor], width: CGFloat, cornerRadius: CGFloat) {
-            let gradient = CAGradientLayer()
-            gradient.frame =  CGRect(origin: .zero, size: self.bounds.size)
-            gradient.colors = colors.map { $0.cgColor }
-            
-            let mask = CAShapeLayer()
-            mask.path = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius).cgPath
-            mask.fillColor = UIColor.clear.cgColor
-            mask.strokeColor = UIColor.white.cgColor
-            mask.lineWidth = width
-            
-            gradient.mask = mask
-            
-            layer.addSublayer(gradient)
-        }
-
 }
 
 
