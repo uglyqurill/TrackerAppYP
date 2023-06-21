@@ -8,6 +8,9 @@ protocol TrackersCollectionViewCellDelegate: AnyObject {
 final class TrackersCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "trackersCollectionViewCell"
+    
+    private let analyticsService = AnalyticsService()
+    var tapTrackerCount = 0
 
     public weak var delegate: TrackersCollectionViewCellDelegate?
     private var isCompletedToday: Bool = false
@@ -178,6 +181,8 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             assertionFailure("no trackerID")
             return
         }
+        
+        analyticsService.report(event: "click", params: ["track" : tapTrackerCount])
         
         if isCompletedToday {
             delegate?.uncompleteTracker(id: trackerId, at: indexPath)

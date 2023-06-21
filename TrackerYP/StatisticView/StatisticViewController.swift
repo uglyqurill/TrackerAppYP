@@ -1,5 +1,4 @@
 import UIKit
-import CoreData
 
 final class StatisticViewController: UIViewController {
     private lazy var viewLabel: UILabel = {
@@ -36,7 +35,7 @@ final class StatisticViewController: UIViewController {
 
         let gradientView = UIView(frame: CGRect(x: 0, y: 0, width: 343, height: 90))
         gradientView.backgroundColor = UIColor.clear
-        gradientView.addGradientBorder(colors: [color1, color2, color3], width: 3, cornerRadius: 16)
+        gradientView.addGradientBorder(colors: [color1, color2, color3], width: 1, cornerRadius: 16)
         gradientView.layer.cornerRadius = 16
         gradientView.layer.masksToBounds = true
 
@@ -121,8 +120,6 @@ final class StatisticViewController: UIViewController {
         view.addSubview(statNameLabel)
         
         NSLayoutConstraint.activate([
-//            gradientView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-//            gradientView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             gradientView.topAnchor.constraint(equalTo: viewLabel.bottomAnchor, constant: 77),
             gradientView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             gradientView.widthAnchor.constraint(equalToConstant: 343),

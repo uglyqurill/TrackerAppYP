@@ -5,25 +5,32 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     private let trackerRecordStore = TrackerRecordStore()
     private let trackerStore = TrackerStore()
     
-    let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 140))
-    let navItem = UINavigationItem()
-    let navItem2 = UINavigationItem()
-    let label = UILabel(frame: CGRect(x: 0, y: 40, width: 254, height: 41))
-    let plusButton = UIButton(type: .system)
-    let hoopImage = UIImage(named: "StarHoop")
-    let thinkImage = UIImage(named: "ThinkngEmoji")
-    var centreImageView = UIImageView()
-    let qustionLabel = UILabel()
-    let mainLabel = NSLocalizedString("trackerTitle", comment: "Text displayed as a title of main view")
-    let searchLabel = NSLocalizedString("search", comment: "Text for search placeholder")
-    var selectedFilter: Filter?
+    private let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 140))
+    private let navItem = UINavigationItem()
+    private let navItem2 = UINavigationItem()
+    private let label = UILabel(frame: CGRect(x: 0, y: 40, width: 254, height: 41))
+    private let plusButton = UIButton(type: .system)
+    private let hoopImage = UIImage(named: "StarHoop")
+    private let thinkImage = UIImage(named: "ThinkngEmoji")
+    private var centreImageView = UIImageView()
+    private let qustionLabel = UILabel()
+    private let mainLabel = NSLocalizedString("trackerTitle", comment: "Text displayed as a title of main view")
+    private let searchLabel = NSLocalizedString("search", comment: "Text for search placeholder")
+    private var selectedFilter: Filter?
     
-    var currentDate: Int?
-    var searchText: String = ""
-    var categories: [TrackerCategoryModel] = [] //все категории
-    var pinnedTrackers: [Tracker] = []
-    var visibleCategories: [TrackerCategoryModel] = [] //категории, которые отображается при поиске и/или изменении дня недели
-    var completedTrackers: [TrackerRecord] = [] //трекеры, которые были «выполнены» в выбранную дату
+    //аналитика
+    private let analyticsService = AnalyticsService()
+    private var tapPlusCount = 0
+    private var tapFilterButton = 0
+    private var tapEditButton = 0
+    private var tapDeleteButton = 0
+    
+    private var currentDate: Int?
+    private var searchText: String = ""
+    private var categories: [TrackerCategoryModel] = [] //все категории
+    private var pinnedTrackers: [Tracker] = []
+    private var visibleCategories: [TrackerCategoryModel] = [] //категории, которые отображается при поиске и/или изменении дня недели
+    private var completedTrackers: [TrackerRecord] = [] //трекеры, которые были «выполнены» в выбранную дату
     
     
     private lazy var collectionView: UICollectionView = {
@@ -68,10 +75,22 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         return textField
     }()
     
+    lazy var filterButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Фильтры", for: .normal)
+        button.backgroundColor = UIColor(named: "ypBlue")
+        button.layer.cornerRadius = 16
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.addTarget(self, action: #selector(filtersButtonAction), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypWhiteBlack
+        analyticsService.report(event: "open", params: ["Screen" : "Main"])
         
         // Create the navigation bar
         setupNavBar()
@@ -85,10 +104,18 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         updateCategories(with: trackerCategoryStore.trackerCategories)
         setupTrackers()
         setupCentre()
+        setupFilterButton()
         trackerCategoryStore.delegate = self
         centreImageView.isHidden = true
         qustionLabel.isHidden = true
+        filterButton.isHidden = true
         reloadPlaceholder()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        analyticsService.report(event: "close", params: ["Screen" : "Main"])
+        print("Event: close")
     }
     
     func setupNavBar() {
@@ -180,6 +207,17 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
 
     }
     
+    func setupFilterButton() {
+        view.addSubview(filterButton)
+        
+        NSLayoutConstraint.activate([
+            filterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -17),
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.widthAnchor.constraint(equalToConstant: 114)
+        ])
+    }
+    
     private func setDayOfWeek() {
         let components = Calendar.current.dateComponents([.weekday], from: Date())
         currentDate = components.weekday
@@ -238,6 +276,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         } else {
             centreImageView.isHidden = true
             qustionLabel.isHidden = true
+            filterButton.isHidden = false
         }
     }
     
@@ -260,10 +299,12 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     }
     
     @objc func presentModalViewController() {
+        tapPlusCount += 1
         print(trackerRecordStore.self)
         let creatingTrackerVC = CreatingTrackerViewController()
         creatingTrackerVC.delegate = self
         creatingTrackerVC.view.backgroundColor = .ypWhiteBlack
+        analyticsService.report(event: "click", params: ["Screen" : "Main", "add_track" : tapPlusCount])
         present(creatingTrackerVC, animated: true, completion: nil)
     }
     
@@ -284,13 +325,20 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         if visibleCategories.isEmpty {
             centreImageView.isHidden = false
             qustionLabel.isHidden = false
+            filterButton.isHidden = true
             centreImageView.image = thinkImage
             qustionLabel.text = "Ничего не найдено"
         } else {
             centreImageView.isHidden = true
             qustionLabel.isHidden = true
+            filterButton.isHidden = false
         }
         collectionView.reloadData()
+    }
+    
+    @objc func filtersButtonAction() {
+        tapFilterButton += 1
+        analyticsService.report(event: "click", params: ["Screen" : "Main", "filter" : tapFilterButton])
     }
 
     func createTracker(
@@ -327,7 +375,6 @@ extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         let count = visibleCategories.count
         collectionView.isHidden = count == 0 && pinnedTrackers.count == 0
-        //filtersButton.isHidden = collectionView.isHidden && selectedFilter == nil
         return count + 1
     }
     
@@ -427,11 +474,15 @@ extension TrackersViewController {
             let editTrackerVC = CreatingHabitViewController()
             editTrackerVC.editTracker = tracker
             editTrackerVC.editTrackerDate = self?.datePicker.date ?? Date()
+            self?.tapEditButton += 1
+            self?.analyticsService.report(event: "click", params: ["Screen" : "Main", "edit" : self?.tapEditButton])
             self?.present(editTrackerVC, animated: true)
         }
         
         let delete = UIAction(title: "Удалить", image: nil, attributes: .destructive) { [weak self] action in
             self?.actionSheet(trackerToDelete: tracker)
+            self?.tapDeleteButton += 1
+            self?.analyticsService.report(event: "click", params: ["Screen" : "Main", "delete" : self?.tapDeleteButton])
         }
         return UIMenu(children: [pin, rename, delete])
     }
