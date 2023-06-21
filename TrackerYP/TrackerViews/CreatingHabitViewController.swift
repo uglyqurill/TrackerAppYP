@@ -22,7 +22,6 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     let scheduleButton = UIButton()
     let createButton = UIButton()
     let cancelButton = UIButton()
-    
 
     let separatorView = UIView()
     let emojiLabel = UILabel()
@@ -32,6 +31,10 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     var selectedEmoji = "🌟"
     var selectedColor: UIColor = .gray
     var trackerDays = [WeekDay]()
+    let trackerStore = TrackerStore()
+    
+    var editTracker: Tracker?
+    var editTrackerDate: Date?
 
     let emojiCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     let colorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -282,18 +285,32 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     
     @objc func createNewTracker() { 
         // Cоздание трекера
-        let newTracker = Tracker(
-            id: UUID(),
-            label: searchTrackerField.text ?? "Мой Трекер",
-            color: selectedColor,
-            emoji: selectedEmoji,
-            dailySchedule: trackerDays
-        )
-
-        delegate?.createTracker(newTracker, categoryName: category?.name ?? "Без категории")
-        let rootViewController = self.presentingViewController?.presentingViewController
-        dismiss(animated: true)
-        NotificationCenter.default.post(name: .thirdViewControllerDidDismiss, object: nil)
+        if editTracker == nil {
+            let newTracker = Tracker(
+                id: UUID(),
+                label: searchTrackerField.text ?? "Мой Трекер",
+                color: selectedColor,
+                emoji: selectedEmoji,
+                dailySchedule: trackerDays,
+                pinned: false
+            )
+            
+            delegate?.createTracker(newTracker, categoryName: category?.name ?? "Без категории")
+            dismiss(animated: true)
+            NotificationCenter.default.post(name: .thirdViewControllerDidDismiss, object: nil)
+        } else {
+            guard let editTracker = editTracker else { return }
+            
+            try? trackerStore.updateTracker(
+                newNameTracker: searchTrackerField.text ?? "",
+                newEmoji: selectedEmoji,
+                newColor: selectedColor.hexString ?? "",
+                newSchedule: trackerDays,
+                categoryName: category?.name ?? "Без категории",
+                editableTracker: editTracker
+            )
+            dismiss(animated: true)
+        }
     }
     
     @objc func textFieldDidChange() {

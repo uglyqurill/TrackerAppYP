@@ -244,7 +244,8 @@ final class CreatingIrregularEvent: UIViewController, UICollectionViewDelegate {
             label: searchTrackerField.text ?? "Мой Трекер",
             color: selectedColor,
             emoji: selectedEmoji,
-            dailySchedule: ([.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday])
+            dailySchedule: ([.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]),
+            pinned: false
         )
 
         delegate?.createTracker(newTracker, categoryName: category?.name ?? "Без категории")

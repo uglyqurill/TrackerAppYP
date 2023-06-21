@@ -14,6 +14,9 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private var trackerId: UUID? = nil
     private var indexPath: IndexPath?
     private let limitNumberOfCharacters = 38
+    public var menuView: UIView {
+        return trackerView
+    }
     
     private let doneImage = UIImage(named: "DoneButton")
     private let plusImage = UIImage(systemName: "plus")
