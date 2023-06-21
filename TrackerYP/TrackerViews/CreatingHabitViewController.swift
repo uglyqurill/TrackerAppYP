@@ -47,7 +47,7 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     }
     
     override func viewDidLoad() {
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhiteBlack
         adjustElements()
     }
     
@@ -91,7 +91,7 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     // MARK: Set Functions
     func setLabel() {
         infoLabel.text = "Новая привычка"
-        infoLabel.textColor = UIColor(named: "ypBlackDay")
+        infoLabel.textColor = .ypBlackWhite
         
         infoLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -156,8 +156,8 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
         categoryButton.backgroundColor = UIColor(named: "ypBackgroundDay")
         scheduleButton.backgroundColor = UIColor(named: "ypBackgroundDay")
         
-        categoryButton.setTitleColor(.black, for: .normal)
-        scheduleButton.setTitleColor(.black, for: .normal)
+        categoryButton.setTitleColor(.ypBlackWhite, for: .normal)
+        scheduleButton.setTitleColor(.ypBlackWhite, for: .normal)
         
         separatorView.backgroundColor = UIColor(named: "ypGrey")
         separatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -201,11 +201,11 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     func setupTextLabels() {
         emojiLabel.text = "Emoji"
         emojiLabel.font = UIFont.boldSystemFont(ofSize: 19)
-        emojiLabel.textColor = UIColor(named: "ypBlackDay")
+        emojiLabel.textColor = .ypBlackWhite
         
         colorLabel.text = "Цвет"
         colorLabel.font = UIFont.boldSystemFont(ofSize: 19)
-        colorLabel.textColor = UIColor(named: "ypBlackDay")
+        colorLabel.textColor = .ypBlackWhite
         
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
         colorLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -227,7 +227,7 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     func setupLowerButtons() {
         cancelButton.setTitle("Отменить", for: .normal)
         cancelButton.setTitleColor(UIColor(named: "ypRed"), for: .normal)
-        cancelButton.backgroundColor = .white
+        cancelButton.backgroundColor = .ypWhiteBlack
         cancelButton.layer.borderColor = UIColor(named: "ypRed")?.cgColor
         cancelButton.layer.borderWidth = 2.0
         cancelButton.layer.cornerRadius = 10

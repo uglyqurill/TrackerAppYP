@@ -16,11 +16,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let trackersViewController = TrackersViewController()
         let statisticViewController = StatisticViewController()
+        let trackersLabel = NSLocalizedString("trackerTitle", comment: "Text displayed as a title of trackers tab bar item")
+        let statisticsLabel = NSLocalizedString("statistics", comment: "Text displayed as a title of statistics tab bar item")
         
-        trackersViewController.tabBarItem = UITabBarItem(title: "Трекеры",
+        trackersViewController.tabBarItem = UITabBarItem(title: trackersLabel,
                                                         image: UIImage(named: "CircleTabBar"),
                                                         selectedImage: nil)
-        statisticViewController.tabBarItem = UITabBarItem(title: "Статистика",
+        statisticViewController.tabBarItem = UITabBarItem(title: statisticsLabel,
                                                           image: UIImage(named: "HareTabBar"),
                                                           selectedImage: nil)
         

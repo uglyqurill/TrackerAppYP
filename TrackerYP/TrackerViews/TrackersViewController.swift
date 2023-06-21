@@ -13,6 +13,9 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     let thinkImage = UIImage(named: "ThinkngEmoji")
     var centreImageView = UIImageView()
     let qustionLabel = UILabel()
+    let mainLabel = NSLocalizedString("trackerTitle", comment: "Text displayed as a title of main view")
+    let searchLabel = NSLocalizedString("search", comment: "Text for search placeholder")
+    
     
     var currentDate: Int?
     var searchText: String = ""
@@ -40,9 +43,11 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         picker.calendar.firstWeekday = 2
         picker.translatesAutoresizingMaskIntoConstraints = false
         picker.clipsToBounds = true
+        picker.backgroundColor = .ypDatePickerColor
         picker.layer.cornerRadius = 10
-        picker.tintColor = UIColor(named: "ypBlue")
         picker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
+        
+        picker.setValue(UIColor.black, forKey: "textColor")
 
         return picker
     }()
@@ -51,7 +56,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         let textField = UISearchTextField()
         textField.backgroundColor = UIColor(named: "ypBackground")
         textField.textColor = UIColor(named: "ypBlack")
-        textField.placeholder = "Поиск"
+        textField.placeholder = searchLabel
         textField.textAlignment = .left
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.layer.cornerRadius = 10
@@ -64,8 +69,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        //view.backgroundColor = .black
+        view.backgroundColor = .ypWhiteBlack
         
         // Create the navigation bar
         setupNavBar()
@@ -82,6 +86,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         trackerCategoryStore.delegate = self
         centreImageView.isHidden = true
         qustionLabel.isHidden = true
+        reloadPlaceholder()
     }
     
     func setupNavBar() {
@@ -90,9 +95,9 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         navBar.translatesAutoresizingMaskIntoConstraints = false
         plusButton.translatesAutoresizingMaskIntoConstraints = false
         
-        navBar.backgroundColor = .white
+        navBar.backgroundColor = .ypWhiteBlack
         plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
-        plusButton.tintColor = .black
+        plusButton.tintColor = .ypBlackWhite
         
         view.addSubview(navBar)
         navBar.addSubview(plusButton)
@@ -112,7 +117,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     }
     
     func setupSecondLineNavBar() {
-        label.text = "Трекеры"
+        label.text = mainLabel
         label.font = UIFont(name: "HelveticaNeue", size: 34)
         label.font = UIFont.boldSystemFont(ofSize: 34)
         
@@ -209,13 +214,14 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
             setupCentre()
         } else {
             centreImageView.isHidden = true
+            qustionLabel.isHidden = true
         }
     }
     
     func setupTrackers() {
         // Define categories and trackers
 
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .ypWhiteBlack
         collectionView.dataSource = self
         collectionView.delegate = self
         view.addSubview(collectionView)
@@ -234,6 +240,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         print(trackerRecordStore.self)
         let creatingTrackerVC = CreatingTrackerViewController()
         creatingTrackerVC.delegate = self
+        creatingTrackerVC.view.backgroundColor = .ypWhiteBlack
         present(creatingTrackerVC, animated: true, completion: nil)
     }
     
@@ -243,7 +250,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         if let day = components.weekday {
             currentDate = day
             updateCategories()
-            qustionLabel.isHidden = true
+            reloadPlaceholder()
         }
     }
     

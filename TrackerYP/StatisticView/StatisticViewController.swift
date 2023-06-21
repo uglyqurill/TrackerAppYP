@@ -67,7 +67,7 @@ final class StatisticViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhiteBlack
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,8 +83,12 @@ final class StatisticViewController: UIViewController {
 
         if completedTrackers.isEmpty {
             setupCentre()
+            emojiImageView.isHidden = false
+            emptyLabel.isHidden = false
         } else {
             setupStatisticView()
+            emojiImageView.isHidden = true
+            emptyLabel.isHidden = true
         }
     }
     

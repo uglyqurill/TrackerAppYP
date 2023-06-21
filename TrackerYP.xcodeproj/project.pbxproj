@@ -43,11 +43,12 @@
 		ED37C0CC2A37550900300F55 /* CategoryEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C0CB2A37550900300F55 /* CategoryEditViewController.swift */; };
 		ED37C0CE2A37551A00300F55 /* CategoryCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C0CD2A37551A00300F55 /* CategoryCreateViewController.swift */; };
 		ED37C0D02A37937B00300F55 /* TextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C0CF2A37937B00300F55 /* TextFieldExtension.swift */; };
-		ED37C0EC2A3B2D0400300F55 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = ED37C0EB2A3B2D0400300F55 /* Localizable.stringsdict */; };
 		ED37C1012A3F755A00300F55 /* SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C1002A3F755A00300F55 /* SnapshotTests.swift */; };
 		ED37C1172A3F794700300F55 /* TrackerYPTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C1162A3F794700300F55 /* TrackerYPTests.swift */; };
 		ED37C11F2A3F799700300F55 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = ED37C11E2A3F799700300F55 /* SnapshotTesting */; };
 		ED37C1212A41E81600300F55 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C1202A41E81600300F55 /* UIViewExtension.swift */; };
+		ED37C1222A41ED6F00300F55 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = ED37C1242A41ED6F00300F55 /* Localizable.stringsdict */; };
+		ED37C1292A41EEA900300F55 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = ED37C12B2A41EEA900300F55 /* Localizable.strings */; };
 		ED5C29B32A2E12DF003AA6D0 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5C29B22A2E12DF003AA6D0 /* CategoryViewController.swift */; };
 		ED5C29B52A2E131B003AA6D0 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5C29B42A2E131B003AA6D0 /* CategoryTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -101,11 +102,15 @@
 		ED37C0CB2A37550900300F55 /* CategoryEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditViewController.swift; sourceTree = "<group>"; };
 		ED37C0CD2A37551A00300F55 /* CategoryCreateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCreateViewController.swift; sourceTree = "<group>"; };
 		ED37C0CF2A37937B00300F55 /* TextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldExtension.swift; sourceTree = "<group>"; };
-		ED37C0EB2A3B2D0400300F55 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
 		ED37C1002A3F755A00300F55 /* SnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotTests.swift; sourceTree = "<group>"; };
 		ED37C1142A3F794700300F55 /* TrackerYPTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerYPTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED37C1162A3F794700300F55 /* TrackerYPTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerYPTests.swift; sourceTree = "<group>"; };
 		ED37C1202A41E81600300F55 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		ED37C1232A41ED6F00300F55 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		ED37C1252A41ED8600300F55 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		ED37C1262A41ED8600300F55 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		ED37C12A2A41EEA900300F55 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		ED37C12C2A41EEAC00300F55 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		ED5C29B22A2E12DF003AA6D0 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		ED5C29B42A2E131B003AA6D0 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -291,7 +296,8 @@
 		ED37C0ED2A3B2D1800300F55 /* Locale */ = {
 			isa = PBXGroup;
 			children = (
-				ED37C0EB2A3B2D0400300F55 /* Localizable.stringsdict */,
+				ED37C1242A41ED6F00300F55 /* Localizable.stringsdict */,
+				ED37C12B2A41EEA900300F55 /* Localizable.strings */,
 			);
 			path = Locale;
 			sourceTree = "<group>";
@@ -393,6 +399,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = ED146A8C2A16B29D007EC880;
 			packageReferences = (
@@ -414,8 +421,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				ED146AA52A16B29F007EC880 /* LaunchScreen.storyboard in Resources */,
+				ED37C1292A41EEA900300F55 /* Localizable.strings in Resources */,
 				ED146AA22A16B29F007EC880 /* Assets.xcassets in Resources */,
-				ED37C0EC2A3B2D0400300F55 /* Localizable.stringsdict in Resources */,
+				ED37C1222A41ED6F00300F55 /* Localizable.stringsdict in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -497,8 +505,27 @@
 			isa = PBXVariantGroup;
 			children = (
 				ED146AA42A16B29F007EC880 /* Base */,
+				ED37C1252A41ED8600300F55 /* ru */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		ED37C1242A41ED6F00300F55 /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				ED37C1232A41ED6F00300F55 /* en */,
+				ED37C1262A41ED8600300F55 /* ru */,
+			);
+			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
+		ED37C12B2A41EEA900300F55 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				ED37C12A2A41EEA900300F55 /* en */,
+				ED37C12C2A41EEAC00300F55 /* ru */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -508,6 +535,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -569,6 +597,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

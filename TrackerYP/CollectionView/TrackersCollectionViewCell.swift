@@ -60,7 +60,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         let pointSize = UIImage.SymbolConfiguration(pointSize: 11)
         let image = isCompletedToday ? doneImage : plusImage
-        button.tintColor = .white
+        button.tintColor = .ypWhiteBlack
         button.setImage(image, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 34/2
