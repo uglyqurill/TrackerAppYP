@@ -16,6 +16,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     private let qustionLabel = UILabel()
     private let mainLabel = NSLocalizedString("trackerTitle", comment: "Text displayed as a title of main view")
     private let searchLabel = NSLocalizedString("search", comment: "Text for search placeholder")
+    private let filtersLabel = NSLocalizedString("filters", comment: "Text for search placeholder")
     private var selectedFilter: Filter?
     
     //аналитика
@@ -77,7 +78,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     
     lazy var filterButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Фильтры", for: .normal)
+        button.setTitle(filtersLabel, for: .normal)
         button.backgroundColor = UIColor(named: "ypBlue")
         button.layer.cornerRadius = 16
         button.setTitleColor(UIColor.white, for: .normal)
