@@ -52,6 +52,7 @@
 		ED37C1292A41EEA900300F55 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = ED37C12B2A41EEA900300F55 /* Localizable.strings */; };
 		ED37C12E2A43638E00300F55 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C12D2A43638E00300F55 /* Filters.swift */; };
 		ED37C1302A439BD300300F55 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C12F2A439BD300300F55 /* AnalyticsService.swift */; };
+		ED37C1332A46099D00300F55 /* TrackersSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37C1322A46099D00300F55 /* TrackersSupplementaryView.swift */; };
 		ED5C29B32A2E12DF003AA6D0 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5C29B22A2E12DF003AA6D0 /* CategoryViewController.swift */; };
 		ED5C29B52A2E131B003AA6D0 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5C29B42A2E131B003AA6D0 /* CategoryTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -121,6 +122,7 @@
 		ED37C12C2A41EEAC00300F55 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		ED37C12D2A43638E00300F55 /* Filters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		ED37C12F2A439BD300300F55 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
+		ED37C1322A46099D00300F55 /* TrackersSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersSupplementaryView.swift; sourceTree = "<group>"; };
 		ED5C29B22A2E12DF003AA6D0 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		ED5C29B42A2E131B003AA6D0 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -244,6 +246,7 @@
 				ED146ABC2A16B4A7007EC880 /* ColorCollectionViewCell.swift */,
 				ED146ABE2A16B4C9007EC880 /* TrackersCollectionViewCell.swift */,
 				ED146AC02A16B4DD007EC880 /* SupplementaryView.swift */,
+				ED37C1322A46099D00300F55 /* TrackersSupplementaryView.swift */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -554,6 +557,7 @@
 				ED146ABF2A16B4C9007EC880 /* TrackersCollectionViewCell.swift in Sources */,
 				ED146ACE2A16B59B007EC880 /* Weekday.swift in Sources */,
 				ED146AD32A16B679007EC880 /* StatisticViewController.swift in Sources */,
+				ED37C1332A46099D00300F55 /* TrackersSupplementaryView.swift in Sources */,
 				ED37C0CC2A37550900300F55 /* CategoryEditViewController.swift in Sources */,
 				ED146AAF2A16B369007EC880 /* CreatingHabitViewController.swift in Sources */,
 				ED146AB32A16B394007EC880 /* ScheduleTableViewCell.swift in Sources */,

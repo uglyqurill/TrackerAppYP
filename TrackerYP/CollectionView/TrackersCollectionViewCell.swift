@@ -30,6 +30,14 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         return trackerView
     }()
     
+    private lazy var pinImageView: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "pinImage")
+        image.isHidden = true
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
     private lazy var emojiView: UIView = {
         let emojiView = UIView()
         emojiView.backgroundColor = UIColor(white: 1, alpha: 0.5)
@@ -100,6 +108,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         trackerView.addSubview(emojiView)
         emojiView.addSubview(emojiLabel)
         trackerView.addSubview(trackerNameLabel)
+        trackerView.addSubview(pinImageView)
         contentView.addSubview(resultLabel)
         contentView.addSubview(checkButton)
         
@@ -128,6 +137,11 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             checkButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             checkButton.heightAnchor.constraint(equalToConstant: 34),
             checkButton.widthAnchor.constraint(equalToConstant: 34 ),
+            
+            pinImageView.heightAnchor.constraint(equalToConstant: 12),
+            pinImageView.widthAnchor.constraint(equalToConstant: 8),
+            pinImageView.topAnchor.constraint(equalTo: trackerView.topAnchor, constant: 18),
+            pinImageView.trailingAnchor.constraint(equalTo: trackerView.trailingAnchor, constant: -12),
             
             resultLabel.centerYAnchor.constraint(equalTo: checkButton.centerYAnchor),
             resultLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12)
@@ -164,6 +178,10 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         checkButton.isEnabled = isEnabled
     }
     
+    func setPinnedImage(_ pinned: Bool) {
+        pinImageView.isHidden = !pinned
+    }
+    
     func dayText(day: Int) -> String {
         
         let tasksRemaining = day // Для простоты примера используем числовой литерал
@@ -173,6 +191,33 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         )
         
         return resultText
+    }
+    
+    func configure(
+        _ id: UUID,
+        label: String,
+        color: UIColor,
+        emoji: String,
+        isCompleted: Bool,
+        isEnabled: Bool,
+        completedCount: Int,
+        pinned: Bool
+    ) {
+        trackerId = id
+        trackerNameLabel.text = label
+        trackerView.backgroundColor = color
+        checkButton.backgroundColor = color
+        emojiLabel.text = emoji
+        pinImageView.isHidden = !pinned
+        isCompletedToday = isCompleted
+        checkButton.setImage(isCompletedToday ? UIImage(systemName: "checkmark")! : UIImage(systemName: "plus")!, for: .normal)
+        if isCompletedToday == true {
+            checkButton.alpha = 0.5
+        } else {
+            checkButton.alpha = 1
+        }
+        checkButton.isEnabled = isEnabled
+        resultLabel.text = String.localizedStringWithFormat(NSLocalizedString("numberOfDay", comment: "Число дней"), completedCount)
     }
 
     @objc private func trackButtonTapped() {

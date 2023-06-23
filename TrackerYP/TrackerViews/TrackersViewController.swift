@@ -21,7 +21,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     
     //аналитика
     private let analyticsService = AnalyticsService()
-
+    
     private var currentDate: Int?
     private var searchText: String = ""
     private var categories: [TrackerCategoryModel] = [] //все категории
@@ -55,7 +55,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         picker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
         
         picker.setValue(UIColor.black, forKey: "textColor")
-
+        
         return picker
     }()
     
@@ -104,6 +104,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         setupCentre()
         setupFilterButton()
         trackerCategoryStore.delegate = self
+        trackerStore.delegate = self
         centreImageView.isHidden = true
         qustionLabel.isHidden = true
         filterButton.isHidden = true
@@ -186,7 +187,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         qustionLabel.textAlignment = .center
         qustionLabel.isHidden = false
         qustionLabel.translatesAutoresizingMaskIntoConstraints = false
-
+        
         view.addSubview(centreImageView)
         view.addSubview(qustionLabel)
         
@@ -202,7 +203,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
             qustionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             qustionLabel.widthAnchor.constraint(equalToConstant: 343)
         ])
-
+        
     }
     
     func setupFilterButton() {
@@ -269,7 +270,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     }
     
     private func reloadPlaceholder() {
-        if visibleCategories.isEmpty {
+        if visibleCategories.isEmpty && pinnedTrackers.isEmpty {
             setupCentre()
         } else {
             centreImageView.isHidden = true
@@ -280,14 +281,14 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     
     func setupTrackers() {
         // Define categories and trackers
-
+        
         collectionView.backgroundColor = .ypWhiteBlack
         collectionView.dataSource = self
         collectionView.delegate = self
         view.addSubview(collectionView)
-
+        
         // Add constraints to collection view
-
+        
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: 34),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -336,7 +337,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     @objc func filtersButtonAction() {
         analyticsService.didTapFilterOnMain()
     }
-
+    
     func createTracker(
         _ tracker: Tracker, categoryName: String
     ) {
@@ -412,16 +413,24 @@ extension TrackersViewController: UICollectionViewDataSource {
         cell.setTrackerName(tracker.label)
         cell.setTrackerCheckButtonColor(tracker.color ?? .gray)
         cell.setTrackerEmoji(tracker.emoji ?? ":)")
+        cell.setPinnedImage(tracker.pinned ?? false)
+        
         
         return cell
     }
     
-    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50 //задаем высоту в 50 точек
+    }
+        
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerView", for: indexPath) as! SupplementaryView
-        
+        if indexPath.section == 0 {
+            headerView.titleLabel.text = "Закрепленные"
+        } else {
+            headerView.titleLabel.text = visibleCategories[indexPath.section - 1].name
+        }
         // Set up the header view here
-        headerView.titleLabel.text = visibleCategories[indexPath.section - 1].name
         return headerView
     }
     
@@ -432,7 +441,7 @@ extension TrackersViewController: UICollectionViewDataSource {
             return trackerRecord.idTracker == id && isSameDay
         }
     }
-
+    
 }
 
 extension TrackersViewController {
@@ -527,18 +536,18 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         return 10
     }
     
-
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        referenceSizeForHeaderInSection section: Int
+    ) -> CGSize {
         if section == 0 && pinnedTrackers.count == 0 {
             return .zero
         }
         let indexPath = IndexPath(row: 0, section: section)
         let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
         
-        return CGSize(width: collectionView.bounds.width, height: 50)
-        
-//        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,height: UIView.layoutFittingExpandedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,height: UIView.layoutFittingExpandedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
     }
 }
 
@@ -556,18 +565,25 @@ extension TrackersViewController: TrackerRecordStoreDelegate {
     }
 }
 
+extension TrackersViewController: TrackerStoreDelegate {
+    func store(_ store: TrackerStore, didUpdate update: TrackerStoreUpdate) {
+        updateCategories(with: trackerCategoryStore.trackerCategories)
+        collectionView.reloadData()
+    }
+}
+
 extension TrackersViewController: UICollectionViewDelegate {
     func collectionView(
-         _ collectionView: UICollectionView,
-         contextMenuConfigurationForItemAt indexPath: IndexPath,
-         point: CGPoint
-     ) -> UIContextMenuConfiguration? {
-         let identifier = "\(indexPath.row):\(indexPath.section)" as NSString
-         return UIContextMenuConfiguration(identifier: identifier, previewProvider: nil) {
-             suggestedActions in
-              return self.makeContextMenu(indexPath)
-         }
-     }
+        _ collectionView: UICollectionView,
+        contextMenuConfigurationForItemAt indexPath: IndexPath,
+        point: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        let identifier = "\(indexPath.row):\(indexPath.section)" as NSString
+        return UIContextMenuConfiguration(identifier: identifier, previewProvider: nil) {
+            suggestedActions in
+            return self.makeContextMenu(indexPath)
+        }
+    }
     
     func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
         guard let identifier = configuration.identifier as? String else { return nil }
@@ -578,7 +594,7 @@ extension TrackersViewController: UICollectionViewDelegate {
               let row = Int(rowString),
               let section = Int(sectionString) else { return nil }
         let indexPath = IndexPath(row: row, section: section)
-                
+        
         guard let cell = collectionView.cellForItem(at: indexPath) as? TrackersCollectionViewCell else { return nil }
         
         return UITargetedPreview(view: cell.menuView)
