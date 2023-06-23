@@ -93,7 +93,12 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     
     // MARK: Set Functions
     func setLabel() {
-        infoLabel.text = "Новая привычка"
+        if editTracker != nil {
+            infoLabel.text = "Редактирование привычки"
+        } else {
+            infoLabel.text = "Новая привычка"
+        }
+        
         infoLabel.textColor = .ypBlackWhite
         
         infoLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -108,7 +113,12 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     
     func setSearchTrackerField() {
         searchTrackerField.backgroundColor = UIColor(named: "ypBackgroundDay")
-        searchTrackerField.placeholder = "Введите название трекера"
+        if editTracker != nil {
+            searchTrackerField.placeholder = editTracker?.label
+        } else {
+            searchTrackerField.placeholder = "Введите название трекера"
+        }
+        
         searchTrackerField.layer.cornerRadius = 10
         searchTrackerField.clipsToBounds = true
         searchTrackerField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)

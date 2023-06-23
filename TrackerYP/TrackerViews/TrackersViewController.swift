@@ -21,11 +21,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     
     //аналитика
     private let analyticsService = AnalyticsService()
-    private var tapPlusCount = 0
-    private var tapFilterButton = 0
-    private var tapEditButton = 0
-    private var tapDeleteButton = 0
-    
+
     private var currentDate: Int?
     private var searchText: String = ""
     private var categories: [TrackerCategoryModel] = [] //все категории
@@ -55,6 +51,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
         picker.clipsToBounds = true
         picker.backgroundColor = .ypDatePickerColor
         picker.layer.cornerRadius = 10
+        picker.overrideUserInterfaceStyle = .light
         picker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
         
         picker.setValue(UIColor.black, forKey: "textColor")
@@ -300,12 +297,11 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     }
     
     @objc func presentModalViewController() {
-        tapPlusCount += 1
         print(trackerRecordStore.self)
         let creatingTrackerVC = CreatingTrackerViewController()
         creatingTrackerVC.delegate = self
         creatingTrackerVC.view.backgroundColor = .ypWhiteBlack
-        analyticsService.report(event: "click", params: ["Screen" : "Main", "add_track" : tapPlusCount])
+        analyticsService.didTapAddTrackerOnMain()
         present(creatingTrackerVC, animated: true, completion: nil)
     }
     
@@ -338,8 +334,7 @@ class TrackersViewController: UIViewController, CreateTrackerVCDelegate {
     }
     
     @objc func filtersButtonAction() {
-        tapFilterButton += 1
-        analyticsService.report(event: "click", params: ["Screen" : "Main", "filter" : tapFilterButton])
+        analyticsService.didTapFilterOnMain()
     }
 
     func createTracker(
@@ -475,15 +470,14 @@ extension TrackersViewController {
             let editTrackerVC = CreatingHabitViewController()
             editTrackerVC.editTracker = tracker
             editTrackerVC.editTrackerDate = self?.datePicker.date ?? Date()
-            self?.tapEditButton += 1
-            self?.analyticsService.report(event: "click", params: ["Screen" : "Main", "edit" : self?.tapEditButton])
+            print("ДАТА: ", self?.datePicker.date)
+            self?.analyticsService.didChooseEditOnMain()
             self?.present(editTrackerVC, animated: true)
         }
         
         let delete = UIAction(title: "Удалить", image: nil, attributes: .destructive) { [weak self] action in
             self?.actionSheet(trackerToDelete: tracker)
-            self?.tapDeleteButton += 1
-            self?.analyticsService.report(event: "click", params: ["Screen" : "Main", "delete" : self?.tapDeleteButton])
+            self?.analyticsService.didChooseDeleteOnMain()
         }
         return UIMenu(children: [pin, rename, delete])
     }

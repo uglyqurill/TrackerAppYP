@@ -10,7 +10,6 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     static let identifier = "trackersCollectionViewCell"
     
     private let analyticsService = AnalyticsService()
-    var tapTrackerCount = 0
 
     public weak var delegate: TrackersCollectionViewCellDelegate?
     private var isCompletedToday: Bool = false
@@ -182,7 +181,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             return
         }
         
-        analyticsService.report(event: "click", params: ["track" : tapTrackerCount])
+        analyticsService.didTapTrackerOnMain()
         
         if isCompletedToday {
             delegate?.uncompleteTracker(id: trackerId, at: indexPath)

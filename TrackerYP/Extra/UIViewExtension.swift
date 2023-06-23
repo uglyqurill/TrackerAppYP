@@ -6,6 +6,9 @@ extension UIView {
             gradient.frame =  CGRect(origin: .zero, size: self.bounds.size)
             gradient.colors = colors.map { $0.cgColor }
             
+            gradient.startPoint = CGPoint(x: 0, y: 0.5)
+            gradient.endPoint = CGPoint(x: 1, y: 0.5)
+            
             let mask = CAShapeLayer()
             mask.path = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius).cgPath
             mask.fillColor = UIColor.clear.cgColor

@@ -29,9 +29,9 @@ final class StatisticViewController: UIViewController {
     }()
     
     private lazy var gradientView: UIView = {
-        let color1 = UIColor(named: "gradientBlue") ?? .blue
+        let color1 = UIColor(named: "gradientRed") ?? .red
         let color2 = UIColor(named: "gradientGreen") ?? .green
-        let color3 = UIColor(named: "gradientRed") ?? .red
+        let color3 = UIColor(named: "gradientBlue") ?? .blue
 
         let gradientView = UIView(frame: CGRect(x: 0, y: 0, width: 343, height: 90))
         gradientView.backgroundColor = UIColor.clear
@@ -82,12 +82,10 @@ final class StatisticViewController: UIViewController {
 
         if completedTrackers.isEmpty {
             setupCentre()
-            emojiImageView.isHidden = false
-            emptyLabel.isHidden = false
+            hiddenWhenEmpty()
         } else {
             setupStatisticView()
-            emojiImageView.isHidden = true
-            emptyLabel.isHidden = true
+            hiddenWhenNotEmpty()
         }
     }
     
@@ -135,6 +133,22 @@ final class StatisticViewController: UIViewController {
             statNameLabel.topAnchor.constraint(equalTo: countLabel.bottomAnchor, constant: 7),
             statNameLabel.heightAnchor.constraint(equalToConstant: 18)
         ])
+    }
+    
+    func hiddenWhenEmpty() {
+        emojiImageView.isHidden = false
+        emptyLabel.isHidden = false
+        gradientView.isHidden = true
+        countLabel.isHidden = true
+        statNameLabel.isHidden = true
+    }
+    
+    func hiddenWhenNotEmpty() {
+        emojiImageView.isHidden = true
+        emptyLabel.isHidden = true
+        gradientView.isHidden = false
+        countLabel.isHidden = false
+        statNameLabel.isHidden = false
     }
 }
 

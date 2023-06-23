@@ -189,6 +189,7 @@
 		ED146A972A16B29E007EC880 /* TrackerYP */ = {
 			isa = PBXGroup;
 			children = (
+				ED37C1312A45FCF000300F55 /* Analytics */,
 				ED37C06C2A31F8A600300F55 /* Application */,
 				ED37C0972A34963800300F55 /* Onboarding */,
 				ED146AB52A16B3BA007EC880 /* TrackerViews */,
@@ -295,7 +296,6 @@
 			isa = PBXGroup;
 			children = (
 				ED146A982A16B29E007EC880 /* AppDelegate.swift */,
-				ED37C12F2A439BD300300F55 /* AnalyticsService.swift */,
 				ED146A9A2A16B29E007EC880 /* SceneDelegate.swift */,
 			);
 			path = Application;
@@ -351,6 +351,14 @@
 				ED37C1162A3F794700300F55 /* TrackerYPTests.swift */,
 			);
 			path = TrackerYPTests;
+			sourceTree = "<group>";
+		};
+		ED37C1312A45FCF000300F55 /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				ED37C12F2A439BD300300F55 /* AnalyticsService.swift */,
+			);
+			path = Analytics;
 			sourceTree = "<group>";
 		};
 		ED5C29B62A2E1325003AA6D0 /* CategorySelection */ = {
