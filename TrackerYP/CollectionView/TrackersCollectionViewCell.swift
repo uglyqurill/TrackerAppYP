@@ -8,12 +8,17 @@ protocol TrackersCollectionViewCellDelegate: AnyObject {
 final class TrackersCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "trackersCollectionViewCell"
+    
+    private let analyticsService = AnalyticsService()
 
     public weak var delegate: TrackersCollectionViewCellDelegate?
     private var isCompletedToday: Bool = false
     private var trackerId: UUID? = nil
     private var indexPath: IndexPath?
     private let limitNumberOfCharacters = 38
+    public var menuView: UIView {
+        return trackerView
+    }
     
     private let doneImage = UIImage(named: "DoneButton")
     private let plusImage = UIImage(systemName: "plus")
@@ -23,6 +28,14 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         trackerView.layer.cornerRadius = 16
         trackerView.translatesAutoresizingMaskIntoConstraints = false
         return trackerView
+    }()
+    
+    private lazy var pinImageView: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "pinImage")
+        image.isHidden = true
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
     }()
     
     private lazy var emojiView: UIView = {
@@ -60,7 +73,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         let pointSize = UIImage.SymbolConfiguration(pointSize: 11)
         let image = isCompletedToday ? doneImage : plusImage
-        button.tintColor = .white
+        button.tintColor = .ypWhiteBlack
         button.setImage(image, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 34/2
@@ -95,6 +108,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         trackerView.addSubview(emojiView)
         emojiView.addSubview(emojiLabel)
         trackerView.addSubview(trackerNameLabel)
+        trackerView.addSubview(pinImageView)
         contentView.addSubview(resultLabel)
         contentView.addSubview(checkButton)
         
@@ -123,6 +137,11 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
             checkButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             checkButton.heightAnchor.constraint(equalToConstant: 34),
             checkButton.widthAnchor.constraint(equalToConstant: 34 ),
+            
+            pinImageView.heightAnchor.constraint(equalToConstant: 12),
+            pinImageView.widthAnchor.constraint(equalToConstant: 8),
+            pinImageView.topAnchor.constraint(equalTo: trackerView.topAnchor, constant: 18),
+            pinImageView.trailingAnchor.constraint(equalTo: trackerView.trailingAnchor, constant: -12),
             
             resultLabel.centerYAnchor.constraint(equalTo: checkButton.centerYAnchor),
             resultLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12)
@@ -159,16 +178,11 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         checkButton.isEnabled = isEnabled
     }
     
+    func setPinnedImage(_ pinned: Bool) {
+        pinImageView.isHidden = !pinned
+    }
+    
     func dayText(day: Int) -> String {
-//        let num = day % 10
-//        var resultText = "\(day)"
-//        if num == 1 {
-//            resultText += " день"
-//        } else if num == 2 || num == 3 || num == 4 {
-//            resultText += " дня"
-//        } else {
-//            resultText += " дней"
-//        }
         
         let tasksRemaining = day // Для простоты примера используем числовой литерал
         let resultText = String.localizedStringWithFormat(
@@ -178,12 +192,41 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         
         return resultText
     }
+    
+    func configure(
+        _ id: UUID,
+        label: String,
+        color: UIColor,
+        emoji: String,
+        isCompleted: Bool,
+        isEnabled: Bool,
+        completedCount: Int,
+        pinned: Bool
+    ) {
+        trackerId = id
+        trackerNameLabel.text = label
+        trackerView.backgroundColor = color
+        checkButton.backgroundColor = color
+        emojiLabel.text = emoji
+        pinImageView.isHidden = !pinned
+        isCompletedToday = isCompleted
+        checkButton.setImage(isCompletedToday ? UIImage(systemName: "checkmark")! : UIImage(systemName: "plus")!, for: .normal)
+        if isCompletedToday == true {
+            checkButton.alpha = 0.5
+        } else {
+            checkButton.alpha = 1
+        }
+        checkButton.isEnabled = isEnabled
+        resultLabel.text = String.localizedStringWithFormat(NSLocalizedString("numberOfDay", comment: "Число дней"), completedCount)
+    }
 
     @objc private func trackButtonTapped() {
         guard let trackerId = trackerId, let indexPath = indexPath else {
             assertionFailure("no trackerID")
             return
         }
+        
+        analyticsService.didTapTrackerOnMain()
         
         if isCompletedToday {
             delegate?.uncompleteTracker(id: trackerId, at: indexPath)

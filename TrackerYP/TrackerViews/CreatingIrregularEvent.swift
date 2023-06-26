@@ -38,7 +38,7 @@ final class CreatingIrregularEvent: UIViewController, UICollectionViewDelegate {
     }
     
     override func viewDidLoad() {
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhiteBlack
         adjustElements()
     }
     
@@ -83,7 +83,7 @@ final class CreatingIrregularEvent: UIViewController, UICollectionViewDelegate {
     // MARK: Set Functions
     func setLabel() {
         infoLabel.text = "Новое нерегулярное событие"
-        infoLabel.textColor = UIColor(named: "ypBlackDay")
+        infoLabel.textColor = .ypBlackWhite
         
         infoLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -136,7 +136,7 @@ final class CreatingIrregularEvent: UIViewController, UICollectionViewDelegate {
         
         categoryButton.backgroundColor = UIColor(named: "ypBackgroundDay")
         
-        categoryButton.setTitleColor(.black, for: .normal)
+        categoryButton.setTitleColor(.ypBlackWhite, for: .normal)
         
         categoryButton.translatesAutoresizingMaskIntoConstraints = false
         
@@ -164,11 +164,11 @@ final class CreatingIrregularEvent: UIViewController, UICollectionViewDelegate {
     func setupTextLabels() {
         emojiLabel.text = "Emoji"
         emojiLabel.font = UIFont.boldSystemFont(ofSize: 19)
-        emojiLabel.textColor = UIColor(named: "ypBlackDay")
+        colorLabel.textColor = .ypBlackWhite
         
         colorLabel.text = "Цвет"
         colorLabel.font = UIFont.boldSystemFont(ofSize: 19)
-        colorLabel.textColor = UIColor(named: "ypBlackDay")
+        colorLabel.textColor = .ypBlackWhite
         
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
         colorLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -190,7 +190,7 @@ final class CreatingIrregularEvent: UIViewController, UICollectionViewDelegate {
     func setupLowerButtons() {
         cancelButton.setTitle("Отменить", for: .normal)
         cancelButton.setTitleColor(UIColor(named: "ypRed"), for: .normal)
-        cancelButton.backgroundColor = .white
+        cancelButton.backgroundColor = .ypWhiteBlack
         cancelButton.layer.borderColor = UIColor(named: "ypRed")?.cgColor
         cancelButton.layer.borderWidth = 2.0
         cancelButton.layer.cornerRadius = 10
@@ -244,7 +244,8 @@ final class CreatingIrregularEvent: UIViewController, UICollectionViewDelegate {
             label: searchTrackerField.text ?? "Мой Трекер",
             color: selectedColor,
             emoji: selectedEmoji,
-            dailySchedule: ([.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday])
+            dailySchedule: ([.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]),
+            pinned: false
         )
 
         delegate?.createTracker(newTracker, categoryName: category?.name ?? "Без категории")
@@ -264,7 +265,7 @@ final class CreatingIrregularEvent: UIViewController, UICollectionViewDelegate {
     func isButtonEnabled() {
         if let searchText = searchTrackerField.text, !searchText.isEmpty && selectedEmoji != "" && selectedColor != .gray {
             createButton.isEnabled = true
-            createButton.backgroundColor = UIColor(named: "ypBlackDay")
+            createButton.backgroundColor = .ypBlackWhite
         } else {
             createButton.isEnabled = false
             createButton.backgroundColor = UIColor(named: "ypGrey")
@@ -416,7 +417,7 @@ extension CreatingIrregularEvent: CategoryListViewModelDelegate {
         }
         
         //categoryButton.tintColor = UIColor.clear
-        let firstLine = NSAttributedString(string: "Категория", attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "ypBlackDay") ?? .black])
+        let firstLine = NSAttributedString(string: "Категория", attributes: [NSAttributedString.Key.foregroundColor: UIColor.ypBlackWhite ?? .black])
         let secondLine = NSAttributedString(string: "\n\(categorySubTitle)", attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "ypGrey") ?? .black])
         let title = NSMutableAttributedString(attributedString: firstLine)
         title.append(secondLine)

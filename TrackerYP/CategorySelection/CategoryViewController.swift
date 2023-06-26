@@ -87,7 +87,6 @@ class CategoryViewController: UIViewController {
             imageView.heightAnchor.constraint(equalToConstant: 80),
             imageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 246),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            //imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             label.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
             label.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),

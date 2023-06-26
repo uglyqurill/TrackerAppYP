@@ -6,4 +6,6 @@ struct Tracker: Hashable {
      let color: UIColor?
      let emoji: String?
      let dailySchedule: [WeekDay]?
- }
+     let pinned: Bool?
+    
+}

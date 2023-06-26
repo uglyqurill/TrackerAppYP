@@ -22,7 +22,6 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     let scheduleButton = UIButton()
     let createButton = UIButton()
     let cancelButton = UIButton()
-    
 
     let separatorView = UIView()
     let emojiLabel = UILabel()
@@ -32,6 +31,10 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     var selectedEmoji = "🌟"
     var selectedColor: UIColor = .gray
     var trackerDays = [WeekDay]()
+    let trackerStore = TrackerStore()
+    
+    var editTracker: Tracker?
+    var editTrackerDate: Date?
 
     let emojiCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     let colorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -47,7 +50,7 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     }
     
     override func viewDidLoad() {
-        view.backgroundColor = .white
+        view.backgroundColor = .ypWhiteBlack
         adjustElements()
     }
     
@@ -90,8 +93,13 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     
     // MARK: Set Functions
     func setLabel() {
-        infoLabel.text = "Новая привычка"
-        infoLabel.textColor = UIColor(named: "ypBlackDay")
+        if editTracker != nil {
+            infoLabel.text = "Редактирование привычки"
+        } else {
+            infoLabel.text = "Новая привычка"
+        }
+        
+        infoLabel.textColor = .ypBlackWhite
         
         infoLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -105,7 +113,12 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     
     func setSearchTrackerField() {
         searchTrackerField.backgroundColor = UIColor(named: "ypBackgroundDay")
-        searchTrackerField.placeholder = "Введите название трекера"
+        if editTracker != nil {
+            searchTrackerField.placeholder = editTracker?.label
+        } else {
+            searchTrackerField.placeholder = "Введите название трекера"
+        }
+        
         searchTrackerField.layer.cornerRadius = 10
         searchTrackerField.clipsToBounds = true
         searchTrackerField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -156,8 +169,8 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
         categoryButton.backgroundColor = UIColor(named: "ypBackgroundDay")
         scheduleButton.backgroundColor = UIColor(named: "ypBackgroundDay")
         
-        categoryButton.setTitleColor(.black, for: .normal)
-        scheduleButton.setTitleColor(.black, for: .normal)
+        categoryButton.setTitleColor(.ypBlackWhite, for: .normal)
+        scheduleButton.setTitleColor(.ypBlackWhite, for: .normal)
         
         separatorView.backgroundColor = UIColor(named: "ypGrey")
         separatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -201,11 +214,11 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     func setupTextLabels() {
         emojiLabel.text = "Emoji"
         emojiLabel.font = UIFont.boldSystemFont(ofSize: 19)
-        emojiLabel.textColor = UIColor(named: "ypBlackDay")
+        emojiLabel.textColor = .ypBlackWhite
         
         colorLabel.text = "Цвет"
         colorLabel.font = UIFont.boldSystemFont(ofSize: 19)
-        colorLabel.textColor = UIColor(named: "ypBlackDay")
+        colorLabel.textColor = .ypBlackWhite
         
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
         colorLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -227,7 +240,7 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     func setupLowerButtons() {
         cancelButton.setTitle("Отменить", for: .normal)
         cancelButton.setTitleColor(UIColor(named: "ypRed"), for: .normal)
-        cancelButton.backgroundColor = .white
+        cancelButton.backgroundColor = .ypWhiteBlack
         cancelButton.layer.borderColor = UIColor(named: "ypRed")?.cgColor
         cancelButton.layer.borderWidth = 2.0
         cancelButton.layer.cornerRadius = 10
@@ -282,18 +295,32 @@ final class CreatingHabitViewController: UIViewController, UICollectionViewDeleg
     
     @objc func createNewTracker() { 
         // Cоздание трекера
-        let newTracker = Tracker(
-            id: UUID(),
-            label: searchTrackerField.text ?? "Мой Трекер",
-            color: selectedColor,
-            emoji: selectedEmoji,
-            dailySchedule: trackerDays
-        )
-
-        delegate?.createTracker(newTracker, categoryName: category?.name ?? "Без категории")
-        let rootViewController = self.presentingViewController?.presentingViewController
-        dismiss(animated: true)
-        NotificationCenter.default.post(name: .thirdViewControllerDidDismiss, object: nil)
+        if editTracker == nil {
+            let newTracker = Tracker(
+                id: UUID(),
+                label: searchTrackerField.text ?? "Мой Трекер",
+                color: selectedColor,
+                emoji: selectedEmoji,
+                dailySchedule: trackerDays,
+                pinned: false
+            )
+            
+            delegate?.createTracker(newTracker, categoryName: category?.name ?? "Без категории")
+            dismiss(animated: true)
+            NotificationCenter.default.post(name: .thirdViewControllerDidDismiss, object: nil)
+        } else {
+            guard let editTracker = editTracker else { return }
+            
+            try? trackerStore.updateTracker(
+                newNameTracker: searchTrackerField.text ?? "",
+                newEmoji: selectedEmoji,
+                newColor: selectedColor.hexString ?? "",
+                newSchedule: trackerDays,
+                categoryName: category?.name ?? "Без категории",
+                editableTracker: editTracker
+            )
+            dismiss(animated: true)
+        }
     }
     
     @objc func textFieldDidChange() {

@@ -3,13 +3,16 @@ import UIKit
 class TabBarViewController: UITabBarController {
     
     var window: UIWindow?
+    let trackersLabel = NSLocalizedString("trackerTitle", comment: "Text displayed as a title of trackers tab bar item")
+    let statisticsLabel = NSLocalizedString("statistics", comment: "Text displayed as a title of statistics tab bar item")
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Проинициализируем свойство window:
         window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
-        UITabBar.appearance().backgroundColor = .white
+        UITabBar.appearance().backgroundColor = .ypWhiteBlack
         
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "ypBlue") ?? .blue], for: .selected)
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "ypGrey") ?? .lightGray], for: .normal)
@@ -25,7 +28,7 @@ class TabBarViewController: UITabBarController {
 
         
         // Настройка TabBarItems:
-        trackersVC.tabBarItem = UITabBarItem(title: "Трекеры",
+        trackersVC.tabBarItem = UITabBarItem(title: trackersLabel,
                                              image: UIImage(named: "CircleTabBar"),
                                              selectedImage: nil)
         statisticVC.tabBarItem = UITabBarItem(title: "Статистика",

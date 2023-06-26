@@ -15,7 +15,6 @@ class ColorCollectionViewCell: UICollectionViewCell {
         colorButton.translatesAutoresizingMaskIntoConstraints = false
         
         selectionView = UIView(frame: CGRect(x: 0, y: 0, width: 52, height: 52))
-        //selectionView.backgroundColor = .clear
         selectionView.layer.borderWidth = 3.0
         selectionView.layer.borderColor = UIColor(named: "ypGrey")?.cgColor
         selectionView.layer.cornerRadius = 8
